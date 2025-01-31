@@ -19,7 +19,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -175,3 +174,4 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 sec/
+client_secret_971110591393-esvapa93u3ndgbf9holci7in1g840ocu.apps.googleusercontent.com.json
