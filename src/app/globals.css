@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.bg-primary {
+    background-image: var(--primary) !important; /* Force gradient */
+  }
+
+  
+:root {
+    /* Light Mode */
+  
+      /* Backgrounds */
+      /* Backgrounds */
+    --background: 210 16% 98%; /* Converted from #f8f9fa */
+    --foreground: 222.2 47.4% 11.2%; /* Deep black for text */
+  
+    --primary: linear-gradient(90deg, #FF5733, #C70039, #900C3F); /* Example gradient */
+    --primary-hover: linear-gradient(90deg, #FF7F50, #DC143C, #A52A2A); /* Hover gradient */
+    --primary-active: linear-gradient(90deg, #FF4500, #B22222, #8B0000); /* Active gradient */
+    --primary-foreground: #FFFFFF; /* Pure white for text */
+    
+  
+    /* Secondary (Light Grays) */
+    --secondary: 220 10% 94%; /* Soft light gray */
+    --secondary-hover: 220 10% 88%; /* Slightly darker gray on hover */
+    --secondary-active: 220 10% 80%; /* Even darker gray for active */
+    --secondary-foreground: 222.2 47.4% 11.2%; /* Black text */
+  
+    /* Cards */
+    --card: --card: 210 17% 93%;/* Soft white card background */
+    --card-hover: 0 0% 95%; /* Slightly lighter hover */
+    --card-active: 0 0% 92%; /* Slightly darker active state */
+    --card-foreground: 0 0% 15%; /* Dark gray text */
+  
+    /* Muted */
+    --muted: 220 8% 90%; /* Medium-muted gray */
+    --muted-hover: 220 8% 50%; /* Slightly brighter muted hover */
+    --muted-active: 220 8% 30%; /* Darker muted active */
+    --muted-foreground: 0 0% 65%; /* Muted gray text */
+  
+    /* Accent */
+    --accent: 0 84% 45%; /* Blood orange accent */
+    --accent-hover: 0 90% 50%; /* Brighter accent hover */
+    --accent-active: 0 70% 40%; /* Darker accent active */
+    --accent-foreground: 0 0% 100%; /* Pure white text */
+  
+    /* Borders */
+    --border: 220 10% 85%; /* Subtle light gray */
+    --border-hover: 220 10% 75%; /* Slightly darker border for hover */
+    --border-active: 220 10% 65%; /* Darker border for active */
+  
+    /* Rings (Focus States) */
+    --ring: 0 84% 45%; /* Blood orange focus ring */
+    --ring-hover: 0 70% 40%; /* Darker focus ring */
+  
+    /* Radius */
+    --radius: 0.5rem; /* Default border radius */
+  
+    /* Gradients */
+    --gradient-primary: 90deg, 0 84% 45%, 0 70% 40%; /* Blood orange gradient */
+    --gradient-border: 90deg, 0 84% 45%, 220 10% 80%; /* Primary to gray gradient */
+    --gradient-accent: 90deg, 0 90% 50%, 0 70% 40%; /* Accent gradient */
+
+    .bg-primary {
+        background-image: var(--primary) !important; /* Force gradient */
+      }
+
+  }
+  
+  .dark {
+    /* Dark Mode */
+  
+    /* Backgrounds */
+  --background: 220 6% 8%; /* Converted from #0d0e12 */
+  --foreground: 0 0% 92%; /* Light white-gray text */
+  
+  --primary: linear-gradient(90deg, #FF5733, #C70039, #900C3F); /* Example gradient */
+  --primary-hover: linear-gradient(90deg, #FF7F50, #DC143C, #A52A2A); /* Hover gradient */
+  --primary-active: linear-gradient(90deg, #FF4500, #B22222, #8B0000); /* Active gradient */
+  --primary-foreground: #FFFFFF; /* Pure white for text */
+  
+    /* Secondary (Dark Grays) */
+    --secondary: 220 6% 20%; /* Deep gray */
+    --secondary-hover: 220 6% 25%; /* Slightly lighter gray */
+    --secondary-active: 220 6% 15%; /* Darker gray */
+    --secondary-foreground: 0 0% 92%; /* Light text */
+  
+    /* Cards */
+    --card: 220 12% 10%; /* Converted from #15181e */
+    --card-secondary: 220 6% 8%; /* Converted from #1e222a */
+    --card-third: 220 9% 15%; /* Slightly lighter */
+    --card-hover: 220 8% 18%; /* Slightly lighter */
+    --card-active: 220 8% 12%; /* Darker */
+    --card-foreground: 0 0% 95%; /* Light gray text */
+    
+    /* Muted */
+    --muted: 220 5% %; /* Muted dark gray */
+    --muted-hover: 220 5% 30%; /* Slightly lighter muted */
+    --muted-active: 220 5% 20%; /* Dark muted */
+    --muted-foreground: 0 0% 70%; /* Light muted text */
+  
+    /* Accent */
+    --accent: 0 84% 45%; /* Blood orange */
+    --accent-hover: 0 90% 50%; /* Brighter hover */
+    --accent-active: 0 70% 40%; /* Darker active */
+    --accent-foreground: 0 0% 100%; /* White text */
+  
+    /* Borders */
+    --border: 220 10% 30%; /* Subtle dark gray */
+    --border-hover: 220 10% 35%; /* Slightly lighter */
+    --border-active: 220 10% 25%; /* Darker active */
+  
+    /* Rings (Focus States) */
+    --ring: 0 84% 45%; /* Blood orange focus */
+    --ring-hover: 0 70% 40%; /* Darker focus ring */
+  
+    /* Radius */
+    --radius: 0.5rem; /* Default border radius */
+  
+    /* Gradients */
+    --gradient-primary: 90deg, 0 84% 45%, 0 70% 40%; /* Blood orange gradient */
+    --gradient-border: 90deg, 0 84% 45%, 220 10% 30%; /* Primary to dark gray */
+    --gradient-accent: 90deg, 0 90% 50%, 0 70% 40%; /* Accent gradient */
+  }
+  

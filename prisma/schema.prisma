@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./app_db.sqlite"
+}
+
+
+
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  name         String?
+  password     String?
+  profileImage Bytes?
+  imageOffsetX  Float?   // X-offset for the image position
+  imageOffsetY  Float?   // Y-offset for the image position
+  imageZoom     Float?   // Zoom level for the image
+  role         String?      @default("USER")
+  location     String?
+  latitude     Float?
+  longitude    Float?
+  ipAddress    String?
+  geodata      String? 
+  phone        String?
+  bio          String?
+  title        String?
+  facebook     String?
+  instagram    String?
+  twitter      String?
+  youtube      String?
+  linkedin     String?
+  website      String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  
+  accounts     Account[]
+  ownedGroups  Group[]
+  groups       GroupUser[]
+  sessions     Session[]
+  userImages   UserImages[]
+}
+
+model UserImages {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String
+  data      Bytes
+  fileName  String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Group {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  ownerId     String
+  owner       User        @relation(fields: [ownerId], references: [id])
+  members     GroupUser[]
+}
+
+model GroupUser {
+  id        String   @id @default(uuid())
+  userId    String
+  groupId   String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  group     Group    @relation(fields: [groupId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, groupId])
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  access_token      String?
+  refresh_token     String?
+  expires_at        Int?
+  token_type        String?
+  id_token          String?
+  user              User    @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id])
+}
