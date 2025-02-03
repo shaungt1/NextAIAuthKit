@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 const LoginPage: React.FC = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background">
-      <div className="w-full max-w-md space-y-8 px-6 py-12 shadow-lg dark:shadow-zinc-800">
+      <div className="w-full max-w-md space-y-8 px-6 py-12 shadow-lg dark:shadow-neutral-800">
         <div className="text-center">
           <h1 className="text-2xl font-semibold">Welcome Back</h1>
           <p className="text-sm text-muted-foreground">

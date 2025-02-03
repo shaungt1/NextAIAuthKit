@@ -44,7 +44,7 @@ const ImageEditorModal: React.FC<ImageEditorModalProps> = ({ image, initialAdjus
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75">
-      <div className="bg-card dark:bg-zinc-900 p-6 rounded-lg shadow-lg">
+      <div className="bg-card dark:bg-neutral-900 p-6 rounded-lg shadow-lg">
         <h3 className="text-xl font-semibold mb-4 text-white">Edit Profile Picture</h3>
         <div
           className="relative w-64 h-64 mx-auto overflow-hidden rounded-full border-4 border-primary"

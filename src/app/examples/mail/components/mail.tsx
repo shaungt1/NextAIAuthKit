@@ -162,10 +162,10 @@ export function Mail({
                         <div className='flex items-center px-4 py-2'>
                             <h1 className='text-xl font-bold'>Inbox</h1>
                             <TabsList className='ml-auto'>
-                                <TabsTrigger value='all' className='text-zinc-600 dark:text-zinc-200'>
+                                <TabsTrigger value='all' className='text-neutral-600 dark:text-neutral-200'>
                                     All mail
                                 </TabsTrigger>
-                                <TabsTrigger value='unread' className='text-zinc-600 dark:text-zinc-200'>
+                                <TabsTrigger value='unread' className='text-neutral-600 dark:text-neutral-200'>
                                     Unread
                                 </TabsTrigger>
                             </TabsList>

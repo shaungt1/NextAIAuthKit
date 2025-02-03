@@ -1,7 +1,7 @@
 export const baseColors = [
     {
-        name: 'zinc',
-        label: 'Zinc',
+        name: 'neutral',
+        label: 'neutral',
         activeColor: {
             light: '240 5.9% 10%',
             dark: '240 5.2% 33.9%'
@@ -63,8 +63,8 @@ export const baseColors = [
         }
     },
     {
-        name: 'slate',
-        label: 'Slate',
+        name: 'neutral',
+        label: 'neutral',
         activeColor: {
             light: '215.4 16.3% 46.9%',
             dark: '215.3 19.3% 34.5%'
@@ -126,8 +126,8 @@ export const baseColors = [
         }
     },
     {
-        name: 'stone',
-        label: 'Stone',
+        name: 'neutral',
+        label: 'neutral',
         activeColor: {
             light: '25 5.3% 44.7%',
             dark: '33.3 5.5% 32.4%'

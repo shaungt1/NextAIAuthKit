@@ -23,7 +23,7 @@ const NavigationLinks = () => {
           <Link key={link.href} href={link.href}>
             <button
               className={`${
-                active ? 'bg-primary dark:bg-zinc-700' : 'bg-transparent'
+                active ? 'bg-primary dark:bg-neutral-700' : 'bg-transparent'
               } rounded px-3 py-2`}>
               {link.label}
             </button>
@@ -33,7 +33,7 @@ const NavigationLinks = () => {
       {session ? (
         <>
           <Link href="/profile">
-            <button className="rounded px-3 py-2 bg-primary dark:bg-zinc-700">
+            <button className="rounded px-3 py-2 bg-primary dark:bg-neutral-700">
               Profile
             </button>
           </Link>

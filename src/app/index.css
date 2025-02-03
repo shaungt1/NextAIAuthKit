@@ -1,0 +1,447 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+/**********************************************************************************
+ * Tailwind Custom Theme System - Gradient & Solid Color Support
+ * --------------------------------------------------------------------------------
+ * This theme configuration enables both **solid color themes** and **gradient-based themes** 
+ * using **HSL-based raw color values**. Colors dynamically adjust based on selection, 
+ * ensuring accessibility and UI/UX best practices for readability and contrast.
+ *
+ * The system supports:
+ *  - **Solid Color Themes**: Uses raw HSL values for primary, secondary, and accent colors.
+ *  - **Gradient Themes**: Uses a selected gradient as the primary color with matching variants.
+ *  - **Dark Mode Support**: Automatically applies accessible colors in dark mode.
+ *  - **Interactive States**: Includes Hover, Active, and Foreground colors for buttons, links, etc.
+ * 
+ **********************************************************************************
+ * Solid & Gradient Theme Structure
+ * --------------------------------------------------------------------------------
+ * Each primary color (solid or gradient) has the following properties:
+ * 
+ *  - **Primary:** Main brand color (solid or darkest color in the gradient).
+ *  - **Secondary:** Slightly lighter variation for contrast and UI balance.
+ *  - **Hover:** A slightly **brighter version** of the primary for interactive feedback.
+ *  - **Active:** A slightly **darker version** of the primary for click/press interaction.
+ *  - **Foreground:** A **white or high-contrast color** for text readability.
+ *
+ * Example:
+ * --primary-deep-purple: 267 84% 42%; -- Darkest color in the gradient 
+ * --secondary-deep-purple: 267 74% 52%; -- Slightly lighter variation 
+ * --primary-deep-purple-hover: 267 88% 48%; -- Brighter for hover 
+ * --primary-deep-purple-active: 267 78% 38%; -- Darker for active click 
+ *
+ **********************************************************************************
+ * Root Variables - Default (Light Mode)
+ * --------------------------------------------------------------------------------
+ * The `:root` section defines global CSS variables used throughout the theme.
+ * Colors assigned here **apply to Light Mode by default**. They control:
+ *  - Background & Foreground
+ *  - Primary & Secondary Colors
+ *  - Accent Colors & Borders
+ *  - Input Fields, Buttons, & Ring Effects
+ * 
+ * All solid color values and gradients are assigned dynamically.
+ * - The `--selected-primary` sets the main theme color.
+ * - The `--selected-primary-hover` and `--selected-primary-active` control button interactions.
+ * - The `--selected-accent` defines hover and focus states (default: primary hover).
+ *
+ **********************************************************************************
+ * Dark Mode Variables (Overrides)
+ * --------------------------------------------------------------------------------
+ * When `.dark` mode is active, colors adjust for accessibility and readability.
+ *  - Darker backgrounds and muted foregrounds improve contrast.
+ *  - The `--selected-primary` and `--selected-secondary` switch to their dark mode versions.
+ *  - The `--ring` color ensures interactive elements remain visible.
+ * 
+ * Example:
+ * --background: 240 10% 3.9%;
+ * --foreground: 0 0% 98%;
+ * --primary: var(--selected-primary);
+ * --secondary: var(--selected-secondary);
+ * --accent: var(--selected-primary-hover);
+ *
+ **********************************************************************************
+ * Dynamic Theme Assignments
+ * --------------------------------------------------------------------------------
+ * This system allows **dynamic switching** between themes by reassigning `--selected-primary`
+ * and related properties. This makes it easy to:
+ *  - Switch between gradient and solid color themes.
+ *  - Override themes in **JS or Tailwind Config** by simply changing `--selected-primary`.
+ *  - Maintain a consistent UX across light and dark modes.
+ *
+ **********************************************************************************
+ */
+
+/* === Uncoment to customize link colors Link Styles to adopt primary color === */
+/* @layer base {
+  a {
+    color: hsl(var(--selected-link, var(--white)));
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+  }
+
+  a:hover {
+    color: hsl(var(--selected-link-hover, var(--muted-gray))); 
+  }
+
+  a:active,
+  a:focus {
+    color: hsl(var(--selected-link-active, var(--white))); 
+  }
+
+  a:visited {
+    color: hsl(var(--selected-link-visited, var(--muted-gray))); 
+  }
+} */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: var(--selected-primary);
+    --primary-foreground: 0 0% 98%;
+    --secondary: var(--selected-secondary);
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    /* --accent: 240 4.8% 95.9%; */
+    --accent: var(--selected-primary);
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: var(--selected-primary-hover);
+    --radius: 0.325rem;
+ /* === Gradient Primary Colors === */
+ --primary-grad-deep-purple: linear-gradient(90deg, #6a11cb, #2575fc);
+ --primary-grad-blood-orange: linear-gradient(to right, #FF512F, #DD2476);
+ --primary-grad-hotpink-purple: linear-gradient(90deg, #FF1493, #8A2BE2);
+ --primary-grad-green-blue: linear-gradient(90deg, #00FF7F, #00BFFF);
+ --primary-grad-deep-blue: linear-gradient(to right, #00d2ff, #3a7bd5);
+ --primary-grad-purple-pink: linear-gradient(to right, #DA22FF, #9733EE);
+  --primary-grad-blue-green: linear-gradient(to right, #00c6ff, #0072ff);
+  /* === Raw HSL Variables for All Solid Primary Colors === */
+
+/* === Blue === */
+--primary-blue-50: 210 100% 97%;
+--primary-blue-100: 210 95% 92%;
+--primary-blue-200: 210 90% 82%;
+--primary-blue-300: 210 85% 72%;
+--primary-blue-400: 210 80% 62%;
+--primary-blue-500: 210 75% 52%;
+--primary-blue-600: 210 70% 42%;
+--primary-blue-700: 210 65% 32%;
+--primary-blue-800: 210 60% 22%;
+--primary-blue-900: 210 55% 12%;
+
+/* === Violet === */
+--primary-violet-50: 258.3 100% 97%;
+--primary-violet-100: 258.3 95% 92%;
+--primary-violet-200: 258.3 90% 82%;
+--primary-violet-300: 258.3 85% 72%;
+--primary-violet-400: 258.3 80% 62%;
+--primary-violet-500: 258.3 75% 52%;
+--primary-violet-600: 258.3 70% 42%;
+--primary-violet-700: 258.3 65% 32%;
+--primary-violet-800: 258.3 60% 22%;
+--primary-violet-900: 258.3 55% 12%;
+
+/* === Fuchsia === */
+--primary-fuchsia-50: 292.2 100% 97%;
+--primary-fuchsia-100: 292.2 95% 92%;
+--primary-fuchsia-200: 292.2 90% 82%;
+--primary-fuchsia-300: 292.2 85% 72%;
+--primary-fuchsia-400: 292.2 80% 62%;
+--primary-fuchsia-500: 292.2 75% 52%;
+--primary-fuchsia-600: 292.2 70% 42%;
+--primary-fuchsia-700: 292.2 65% 32%;
+--primary-fuchsia-800: 292.2 60% 22%;
+--primary-fuchsia-900: 292.2 55% 12%;
+
+/* === Teal === */
+--primary-teal-50: 180 100% 97%;
+--primary-teal-100: 180 95% 92%;
+--primary-teal-200: 180 90% 82%;
+--primary-teal-300: 180 85% 72%;
+--primary-teal-400: 180 80% 62%;
+--primary-teal-500: 180 75% 52%;
+--primary-teal-600: 180 70% 42%;
+--primary-teal-700: 180 65% 32%;
+--primary-teal-800: 180 60% 22%;
+--primary-teal-900: 180 55% 12%;
+
+/* === Emerald === */
+--primary-emerald-50: 140 100% 97%;
+--primary-emerald-100: 140 95% 92%;
+--primary-emerald-200: 140 90% 82%;
+--primary-emerald-300: 140 85% 72%;
+--primary-emerald-400: 140 80% 62%;
+--primary-emerald-500: 140 75% 52%;
+--primary-emerald-600: 140 70% 42%;
+--primary-emerald-700: 140 65% 32%;
+--primary-emerald-800: 140 60% 22%;
+--primary-emerald-900: 140 55% 12%;
+
+/* === Rose === */
+--primary-rose-50: 350 100% 97%;
+--primary-rose-100: 350 95% 92%;
+--primary-rose-200: 350 90% 82%;
+--primary-rose-300: 350 85% 72%;
+--primary-rose-400: 350 80% 62%;
+--primary-rose-500: 350 75% 52%;
+--primary-rose-600: 350 70% 42%;
+--primary-rose-700: 350 65% 32%;
+--primary-rose-800: 350 60% 22%;
+--primary-rose-900: 350 55% 12%;
+
+/* === Raw HSL Variables for Gradient Primary Colors (Base Solid Color for Each Gradient) === */
+/************************************************************************************ */
+/* Each gradient theme property has the following variables:
+*- Secondary (Lighter variation for better contrast)
+*- Hover (Slightly brighter than primary for interaction feedback)
+*- Active (Slightly darker for click/press interaction)
+*- Foreground (White for readability and contrast compliance)*/
+/***************************************************************************************/
+
+
+/* === Deep Purple Theme Colors === */
+--primary-deep-purple: 267 84% 42%; /* Base Primary */
+--secondary-deep-purple: 267 74% 52%; /* Slightly lighter */
+--primary-deep-purple-hover: 267 88% 48%; /* Brighter Hover */
+--primary-deep-purple-active: 267 78% 38%; /* Darker Active */
+--primary-deep-purple-foreground: 0 0% 98%; /* White for contrast */
+
+/* === Deep Purple Gradient === */
+--primary-deep-pink: 290 85% 45%;
+--secondary-deep-pink: 290 75% 55%;
+--primary-deep-pink-hover: 290 85% 50%;
+--primary-deep-pink-active: 290 85% 40%;
+--primary-deep-pink-foreground: 0 0% 100%;
+/* === Deep Purple Gradient Base === */
+--primary-deep-purple: 267 84% 42%; /* Darkest color from gradient */
+--secondary-deep-purple: 267 74% 52%;
+--primary-deep-purple-hover: 267 88% 48%;
+--primary-deep-purple-active: 267 78% 38%;
+--primary-deep-purple-foreground: 0 0% 98%;
+
+/* === Blood Orange Gradient Base === */
+--primary-blood-orange: 0 84% 45%; /* Darkest color from gradient */
+--secondary-blood-orange: 0 75% 55%;
+--primary-blood-orange-hover: 0 90% 50%;
+--primary-blood-orange-active: 0 70% 40%;
+--primary-blood-orange-foreground: 0 0% 98%;
+
+/* === Hotpink Purple Gradient Base === */
+--primary-hotpink-purple: 292 78% 38%; /* Darkest color from gradient */
+--secondary-hotpink-purple: 310 80% 50%;
+--primary-hotpink-purple-hover: 292 85% 45%;
+--primary-hotpink-purple-active: 292 70% 32%;
+--primary-hotpink-purple-foreground: 0 0% 98%;
+
+/* === Green Blue Gradient Base === */
+--primary-green-blue: 190 85% 40%; /* Darkest color from gradient */
+--secondary-green-blue: 190 85% 50%;
+--primary-green-blue-hover: 190 90% 45%;
+--primary-green-blue-active: 190 75% 35%;
+--primary-green-blue-foreground: 0 0% 98%;
+
+/* === Deep Blue Gradient Base === */
+--primary-deep-blue: 217 90% 35%; /* Darkest color from gradient */
+--secondary-deep-blue: 220 90% 50%;
+--primary-deep-blue-hover: 217 95% 40%;
+--primary-deep-blue-active: 217 80% 30%;
+--primary-deep-blue-foreground: 0 0% 98%;
+
+/* === Purple Pink Gradient Base === */
+--primary-purple-pink: 290 80% 42%; /* Darkest color from gradient */
+--secondary-purple-pink: 290 75% 52%;
+--primary-purple-pink-hover: 290 85% 50%;
+--primary-purple-pink-active: 290 70% 38%;
+--primary-purple-pink-foreground: 0 0% 98%;
+
+/* === Blue Green Gradient Base === */
+--primary-blue-green: 210 90% 38%; /* Darkest color from gradient */
+--secondary-blue-green: 200 85% 50%;
+--primary-blue-green-hover: 210 95% 45%;
+--primary-blue-green-active: 210 75% 32%;
+--primary-blue-green-foreground: 0 0% 98%;
+
+--selected-accent: var(--selected-primary-hover);
+--selected-accent-hover: var(--selected-primary-active);
+--selected-accent-foreground: var(--selected-primary-foreground);
+
+--selected-ring: var(--selected-primary-hover);
+--selected-border: var(--selected-secondary);
+
+/* === Defualt URL colors */
+  /* Default White and Muted Colors */
+  --white: 0 0% 100%;
+  --muted-gray: 240 4.8% 95.9%;
+
+  /* Selectable Link Colors */
+  /* --selected-link: var(--selected-primary);
+ --selected-link-hover: var(--selected-primary);
+ --selected-link-active: var(--selected-primary);
+ --selected-link-visited: var(--selected-primary); */
+
+
+/* ========================== ONLY CHANGE THESE BELOW ================== */
+  
+  /* === Assignable Selected Variables (Dynamically Overridable) === */
+  --selected-primary: var(--primary-deep-purple);  /* CHANGE THIS VARIABLE*/
+  --selected-secondary: var(--secondary-deep-purple); /* CHANGE THIS VARIABLE*/
+  --selected-primary-hover: var(--primary-deep-purple-hover); /* CHANGE THIS VARIABLE*/
+  --selected-primary-active: var(--primary-deep-purple-active); /* CHANGE THIS VARIABLE*/
+  --selected-primary-foreground: var(--primary-deep-purple-foreground); /* CHANGE THIS VARIABLE*/
+
+  /* SELECT AND ADD YOUR GRADIENT PRIMARY VARIABLE BELOW TO THE "bg-priamry" CLASS */
+  .bg-primary {
+    background-image: var(--primary-grad-deep-purple) !important;
+    background-color: var(--selected-primary) !important;
+  } 
+
+  .hover\:bg-primary-hover:hover {
+    background-image: var(--selected-primary) !important;
+    background-color: var(--selected-primary) !important;
+  }
+  /* =================================================================== */
+  }
+ 
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: var(--selected-primary);
+    --primary-foreground: 0 0% 98%;
+    --secondary: var(--selected-secondary);
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    /* --muted: var(--selected-primary-active); */
+    --muted-foreground: 240 5% 64.9%;
+    --accent: var(--selected-primary-hover);
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: var(--selected-primary-hover);
+    --radius: 0.325rem;
+
+ /*WARNING DO NOT CHANGE THESE */
+--selected-accent: var(--selected-primary-hover); 
+--selected-accent-hover: var(--selected-primary-active);
+--selected-accent-foreground: var(--selected-primary-foreground);
+--selected-ring: var(--selected-primary-hover);
+--selected-border: var(--selected-secondary);
+
+ /* Default White and Muted Colors for Dark Mode */
+ --white: 0 0% 100%;
+ --muted-gray: 240 4.8% 20%; /* Darker version of muted for contrast */
+
+ /* Selectable Link Colors */
+ --selected-link: var(--selected-primary);
+ --selected-link-hover: var(--selected-primary);
+ --selected-link-active: var(--selected-primary);
+ --selected-link-visited: var(--selected-primary);
+
+  /* ========================== ONLY CHANGE THESE BELOW ================== */
+  
+  /* === Assignable Selected Variables (Dynamically Overridable) === */
+  --selected-primary: var(--primary-deep-purple);  /* CHANGE THIS VARIABLE*/
+  --selected-secondary: var(--secondary-deep-purple); /* CHANGE THIS VARIABLE*/
+  --selected-primary-hover: var(--primary-deep-purple-hover); /* CHANGE THIS VARIABLE*/
+  --selected-primary-active: var(--primary-deep-purple-active); /* CHANGE THIS VARIABLE*/
+  --selected-primary-foreground: var(--primary-deep-purple-foreground); /* CHANGE THIS VARIABLE*/
+
+  /* SELECT AND ADD YOUR GRADIENT PRIMARY VARIABLE BELOW TO THE "bg-priamry" CLASS */
+  .bg-primary {
+    background-image: var(--primary-grad-deep-purple) !important;
+    background-color: var(--selected-primary) !important;
+  } 
+
+  .hover\:bg-primary-hover:hover {
+    background-image: var(--selected-primary) !important;
+    background-color: var(--selected-primary) !important;
+  }
+  /* =================================================================== */
+
+
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Add styles for markdown content */
+.prose {
+  @apply max-w-none;
+}
+
+.prose h1 {
+  @apply text-3xl font-bold mb-4 mt-6;
+}
+
+.prose h2 {
+  @apply text-2xl font-semibold mb-3 mt-5;
+}
+
+.prose h3 {
+  @apply text-xl font-medium mb-2 mt-4;
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose ul {
+  @apply list-disc pl-5 mb-4;
+}
+
+.prose ol {
+  @apply list-decimal pl-5 mb-4;
+}
+
+.prose table {
+  @apply w-full border-collapse mb-4;
+}
+
+.prose th,
+.prose td {
+  @apply border p-2 text-left;
+}
+
+.prose th {
+  @apply bg-muted font-medium;
+}
+
+.dark .prose {
+  @apply text-gray-200;
+}
+
+.dark .prose a {
+  color: hsl(var(--selected-primary)) !important;
+}
+
+.dark .prose code {
+  color: hsl(var(--selected-primary-hover)) !important;
+}
+
+
+.dark .prose th {
+  @apply bg-gray-800;
+}

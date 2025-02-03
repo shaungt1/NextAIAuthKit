@@ -5,7 +5,7 @@ import ThemeSwitch from '@/app/HomePage/ThemeSwitch';
 
 const NavigationBar = () => {
     return (
-        <div className="fixed top-0 mb-3 left-0 right-0 z-50 w-full dark:bg-zinc-900 bg-white shadow-md">
+        <div className="fixed top-0 mb-3 left-0 right-0 z-50 w-full dark:bg-neutral-900 bg-white shadow-md">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 pb-3 py-3 sm:px-6 lg:px-8">
                 {/* Navigation Links */}
                 <NavigationLinks />
@@ -17,7 +17,7 @@ const NavigationBar = () => {
 
                     {/* Hamburger Menu */}
                     <button
-                        className="block sm:hidden rounded-md p-2 text-gray-600 dark:text-zinc-100 hover:bg-gray-100 dark:hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+                        className="block sm:hidden rounded-md p-2 text-gray-600 dark:text-neutral-100 hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
                         aria-label="Toggle navigation menu"
                     >
                         {/* Icon can be replaced with an actual Hamburger icon */}

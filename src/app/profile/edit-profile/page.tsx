@@ -679,7 +679,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
 
     if (status === 'loading') return <p>Loading...</p>;
     return (
-        <div className='flex min-h-screen flex-col items-center bg-background p-6 pt-24 text-foreground dark:bg-zinc-950 dark:text-zinc-100'>
+        <div className='flex min-h-screen flex-col items-center bg-background p-6 pt-24 text-foreground dark:bg-neutral-950 dark:text-neutral-100'>
             {/* Page Title */}
             <h1 className='mb-10 text-3xl font-bold'>Edit Profile</h1>
 
@@ -688,12 +688,12 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                     e.preventDefault();
                     handleUpdateProfile(e); 
                   }}
-                className='w-full max-w-3xl space-y-8 rounded bg-card p-6 shadow-lg dark:bg-zinc-900'>
+                className='w-full max-w-3xl space-y-8 rounded bg-card p-6 shadow-lg dark:bg-neutral-900'>
                 {/* Top Section: Profile Header */}
                 <div className='mb-8 flex items-center gap-6'>
                 <div className="relative flex flex-col items-center">     
                      {/* Profile Image Preview */}
-                     <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-card dark:border-zinc-700 shadow-md">
+                     <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-card dark:border-neutral-700 shadow-md">
                         <img
                           src={profileImage || 'https://via.placeholder.com/150'}
                           alt="Profile"
@@ -744,7 +744,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                     <div className='flex flex-col space-y-2'>
 
                     <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-zinc-300">
+                    <label htmlFor="name" className="block text-sm font-medium text-neutral-300">
                         Name
                     </label>
                     <div className="relative">
@@ -756,17 +756,17 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                         readOnly={!isEditing.name}
                         onBlur={() => handleInputBlur('name')}
                         onKeyDown={(e) => handleKeyDown(e, 'name')}
-                        className={`w-full rounded px-3 py-2 text-zinc-100 ${isEditing.name ? 'border border-primary bg-zinc-800 focus:ring-2 focus:ring-primary focus:outline-none' : 'bg-zinc-700'}`}
+                        className={`w-full rounded px-3 py-2 text-neutral-100 ${isEditing.name ? 'border border-primary bg-neutral-800 focus:ring-2 focus:ring-primary focus:outline-none' : 'bg-neutral-700'}`}
                          />
                         <Edit
                         onClick={() => handleEditClick('name')}
-                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-zinc-400 hover:text-primary"
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-neutral-400 hover:text-primary"
                         />
                     </div>
                     </div>
 
                     <div>
-                    <label htmlFor="title" className="block text-sm font-medium text-zinc-300">
+                    <label htmlFor="title" className="block text-sm font-medium text-neutral-300">
                         Professional Title
                     </label>
                     <div className="relative">
@@ -778,11 +778,11 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                         readOnly={!isEditing.title}
                         onBlur={() => handleInputBlur('title')}
                         onKeyDown={(e) => handleKeyDown(e, 'title')}
-                        className={`w-full rounded px-3 py-2 text-zinc-100 ${isEditing.title ? 'border border-primary bg-zinc-800 focus:ring-2 focus:ring-primary focus:outline-none' : 'bg-zinc-700'}`}
+                        className={`w-full rounded px-3 py-2 text-neutral-100 ${isEditing.title ? 'border border-primary bg-neutral-800 focus:ring-2 focus:ring-primary focus:outline-none' : 'bg-neutral-700'}`}
                         />
                         <Edit
                         onClick={() => handleEditClick('title')}
-                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-zinc-400 hover:text-primary"
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-neutral-400 hover:text-primary"
                         />
                     </div>
                     </div>
@@ -808,7 +808,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                                 type='email'
                                 value={formData.email}
                                 readOnly
-                                className='w-full dark:bg-zinc-900 bg-muted-foreground/10'
+                                className='w-full dark:bg-neutral-900 bg-muted-foreground/10'
                             />
                           
                         </div>
@@ -821,8 +821,8 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                                 type='text'
                                 value={formData.role}
                                 readOnly
-                                className=' dark:bg-zinc-900 rounded bg-muted-foreground/10'
-                                // className="w-full p-2 border rounded-lg dark:bg-zinc-800"
+                                className=' dark:bg-neutral-900 rounded bg-muted-foreground/10'
+                                // className="w-full p-2 border rounded-lg dark:bg-neutral-800"
                             />
                         </div>
                         <div>
@@ -834,7 +834,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                                 type='text'
                                 value={formData.userId}
                                 readOnly
-                                className='w-full dark:bg-zinc-900 bg-muted-foreground/10'
+                                className='w-full dark:bg-neutral-900 bg-muted-foreground/10'
                             />
                         </div>
                     </div>
@@ -852,7 +852,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                             type='text'
                             value={formData.location}
                             readOnly
-                            className='w-full rounded  input-class dark:bg-zinc-900 bg-muted-foreground/10'
+                            className='w-full rounded  input-class dark:bg-neutral-900 bg-muted-foreground/10'
                         />
                     </div>
               
@@ -863,7 +863,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                 type='text'
                 value={formData.ipAddress}
                 readOnly
-                className=' rounded w-full input-class dark:bg-zinc-900 bg-muted-foreground/10'
+                className=' rounded w-full input-class dark:bg-neutral-900 bg-muted-foreground/10'
               />
               </label>
             
@@ -879,7 +879,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                 type='text'
                 value={formData.latitude}
                 readOnly
-                className='w-full rounded input-class dark:bg-zinc-900 bg-muted-foreground/10'
+                className='w-full rounded input-class dark:bg-neutral-900 bg-muted-foreground/10'
               />
             </div>
             <div>
@@ -891,7 +891,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                 type='text'
                 value={formData.longitude}
                 readOnly
-                className='w-full input-class dark:bg-zinc-900 bg-muted-foreground/10'
+                className='w-full input-class dark:bg-neutral-900 bg-muted-foreground/10'
               />
             </div>
           </div>
@@ -909,7 +909,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                             type='tel'
                             value={formData.phone}
                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            className='w-full rounded border input-class dark:bg-zinc-800 bg-muted-foreground/10'
+                            className='w-full rounded border input-class dark:bg-neutral-800 bg-muted-foreground/10'
                         />
                     </div>
                 </Card>
@@ -926,7 +926,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                             type='text'
                             value={formData.title}
                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            className='w-full rounded border input-class dark:bg-zinc-800 bg-muted-foreground/10'
+                            className='w-full rounded border input-class dark:bg-neutral-800 bg-muted-foreground/10'
                         />
                     </div>
                     <div>
@@ -937,7 +937,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                             id='bio'
                             value={formData.bio}
                             onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                            className='input-class w-full rounded border input-class dark:bg-zinc-800 bg-muted-foreground/10'
+                            className='input-class w-full rounded border input-class dark:bg-neutral-800 bg-muted-foreground/10'
                         />
                     </div>
                 </Card>
@@ -961,7 +961,7 @@ async function handleUpdateProfile(event: React.FormEvent<HTMLFormElement>) {
                                 placeholder={label}
                                 value={formData[id as keyof typeof formData] as string}
                                 onChange={(e) => setFormData({ ...formData, [id]: e.target.value })}
-                                className='input-class w-full rounded border input-class dark:bg-zinc-800 bg-muted-foreground/10'
+                                className='input-class w-full rounded border input-class dark:bg-neutral-800 bg-muted-foreground/10'
                             />
                         </div>
                     ))}

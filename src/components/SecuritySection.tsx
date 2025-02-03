@@ -154,7 +154,7 @@ console.log('formData for AUTH',formData)
                   currentPassword: e.target.value,
                 })
               }
-              className="input-class w-full rounded border input-class dark:bg-zinc-800 bg-muted-foreground/10"
+              className="input-class w-full rounded border input-class dark:bg-neutral-800 bg-muted-foreground/10"
             />
           </div>
           <div>
@@ -172,7 +172,7 @@ console.log('formData for AUTH',formData)
                   newPassword: e.target.value,
                 })
               }
-              className="input-class w-full rounded border input-class dark:bg-zinc-800 bg-muted-foreground/10"
+              className="input-class w-full rounded border input-class dark:bg-neutral-800 bg-muted-foreground/10"
             />
           </div>
           <div>
@@ -190,7 +190,7 @@ console.log('formData for AUTH',formData)
                   confirmPassword: e.target.value,
                 })
               }
-              className="input-class w-full rounded border input-class dark:bg-zinc-800 bg-muted-foreground/10"
+              className="input-class w-full rounded border input-class dark:bg-neutral-800 bg-muted-foreground/10"
             />
           </div>
           <Button

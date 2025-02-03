@@ -12,7 +12,7 @@ export const colors = {
         rgb: 'rgb(255,255,255)',
         hsl: 'hsl(0,0%,100%)'
     },
-    slate: [
+    neutral: [
         {
             scale: 50,
             hex: '#f8fafc',
@@ -148,7 +148,7 @@ export const colors = {
             hsl: 'hsl(224,71.4%,4.1%)'
         }
     ],
-    zinc: [
+    neutral: [
         {
             scale: 50,
             hex: '#fafafa',
@@ -284,7 +284,7 @@ export const colors = {
             hsl: 'hsl(0,0%,3.9%)'
         }
     ],
-    stone: [
+    neutral: [
         {
             scale: 50,
             hex: '#fafaf9',

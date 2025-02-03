@@ -89,7 +89,7 @@ const ExtensionDetails: React.FC = async () => {
                         <Link href={``} target='_blank'>
                             <img className='size-9 hover:cursor-pointer' src={extension.iconUri} alt={extension.name} />
                         </Link>
-                        <div className='absolute bottom-full left-1/2 mb-2 hidden -translate-x-1/2 transform space-y-1.5 whitespace-nowrap rounded bg-zinc-200 p-3 text-sm text-black group-hover:block'>
+                        <div className='absolute bottom-full left-1/2 mb-2 hidden -translate-x-1/2 transform space-y-1.5 whitespace-nowrap rounded bg-neutral-200 p-3 text-sm text-black group-hover:block'>
                             <h3 className='text-lg'>{extension.displayName}</h3>
                             <p>Downloads: {extension.downloadCount.toLocaleString()}</p>
                         </div>

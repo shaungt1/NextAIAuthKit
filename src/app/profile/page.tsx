@@ -274,12 +274,12 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background dark:bg-zinc-950 text-foreground dark:text-zinc-100 p-6">
+    <div className="min-h-screen bg-background dark:bg-neutral-950 text-foreground dark:text-neutral-100 p-6">
       {/* Profile Picture */}
       <div className="flex flex-col items-center mt-12 mb-6">
         <div className="relative">   
           {/* Profile Image Preview */}
-          <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-card dark:border-zinc-700 shadow-md">
+          <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-card dark:border-neutral-700 shadow-md">
             <img
               src={profileImage || 'https://via.placeholder.com/150'}
               alt="Profile"
@@ -326,7 +326,7 @@ export default function ProfilePage() {
                </div>
         </div>
       {/* Profile data name and title */}
-      <Card className="w-full max-w-3xl mx-auto bg-card dark:bg-zinc-900 p-8 shadow-xl rounded-2xl">
+      <Card className="w-full max-w-3xl mx-auto bg-card dark:bg-neutral-900 p-8 shadow-xl rounded-2xl">
         {/* Name and Role */}
         <div className="text-center mt-3 mb-6">
           <h1 className="text-3xl font-bold">{profileData.name}</h1>
@@ -353,7 +353,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <hr className="my-6 border-border dark:border-zinc-700" />
+        <hr className="my-6 border-border dark:border-neutral-700" />
 
         {/* Professional Details */}
         <div>
@@ -362,7 +362,7 @@ export default function ProfilePage() {
           <p>Bio: {profileData.bio || "No bio available"}</p>
         </div>
 
-        <hr className="my-6 border-border dark:border-zinc-700" />
+        <hr className="my-6 border-border dark:border-neutral-700" />
 
         {/* Social Links */}
         <div>
@@ -382,7 +382,7 @@ export default function ProfilePage() {
           ))}
         </div>
 
-        <hr className="my-6 border-border dark:border-zinc-700" />
+        <hr className="my-6 border-border dark:border-neutral-700" />
 
         {/* GPS & IP Details */}
         <div>
@@ -392,7 +392,7 @@ export default function ProfilePage() {
           <p>IP Address: {profileData.ipAddress || "N/A"}</p>
         </div>
 
-        <hr className="my-6 border-border dark:border-zinc-700" />
+        <hr className="my-6 border-border dark:border-neutral-700" />
 
         {/* Action Buttons */}
         <div className="mt-8 space-y-4">

@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 .next
+node_modules/
+*node_modules
 __registry__
 .__registry__
 sec  
@@ -175,3 +177,7 @@ cython_debug/
 .pypirc
 sec/
 client_secret_971110591393-esvapa93u3ndgbf9holci7in1g840ocu.apps.googleusercontent.com.json
+
+
+# Contentlayer
+.contentlayer

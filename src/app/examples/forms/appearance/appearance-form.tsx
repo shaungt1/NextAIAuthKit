@@ -46,7 +46,7 @@ export function AppearanceForm() {
         toast({
             title: 'You submitted the following values:',
             description: (
-                <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+                <pre className='mt-2 w-[340px] rounded-md bg-neutral-950 p-4'>
                     <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
                 </pre>
             )
@@ -124,18 +124,18 @@ export function AppearanceForm() {
                                             <RadioGroupItem value='dark' className='sr-only' />
                                         </FormControl>
                                         <div className='items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground'>
-                                            <div className='space-y-2 rounded-sm bg-slate-950 p-2'>
-                                                <div className='space-y-2 rounded-md bg-slate-800 p-2 shadow-sm'>
-                                                    <div className='h-2 w-[80px] rounded-lg bg-slate-400' />
-                                                    <div className='h-2 w-[100px] rounded-lg bg-slate-400' />
+                                            <div className='space-y-2 rounded-sm bg-neutral-950 p-2'>
+                                                <div className='space-y-2 rounded-md bg-neutral-800 p-2 shadow-sm'>
+                                                    <div className='h-2 w-[80px] rounded-lg bg-neutral-400' />
+                                                    <div className='h-2 w-[100px] rounded-lg bg-neutral-400' />
                                                 </div>
-                                                <div className='flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm'>
-                                                    <div className='size-4 rounded-full bg-slate-400' />
-                                                    <div className='h-2 w-[100px] rounded-lg bg-slate-400' />
+                                                <div className='flex items-center space-x-2 rounded-md bg-neutral-800 p-2 shadow-sm'>
+                                                    <div className='size-4 rounded-full bg-neutral-400' />
+                                                    <div className='h-2 w-[100px] rounded-lg bg-neutral-400' />
                                                 </div>
-                                                <div className='flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm'>
-                                                    <div className='size-4 rounded-full bg-slate-400' />
-                                                    <div className='h-2 w-[100px] rounded-lg bg-slate-400' />
+                                                <div className='flex items-center space-x-2 rounded-md bg-neutral-800 p-2 shadow-sm'>
+                                                    <div className='size-4 rounded-full bg-neutral-400' />
+                                                    <div className='h-2 w-[100px] rounded-lg bg-neutral-400' />
                                                 </div>
                                             </div>
                                         </div>

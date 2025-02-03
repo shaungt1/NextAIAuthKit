@@ -153,7 +153,7 @@ export default function Component() {
                     <SelectTrigger className='w-[160px] rounded-lg sm:ml-auto' aria-label='Select a value'>
                         <SelectValue placeholder='Last 3 months' />
                     </SelectTrigger>
-                    <SelectContent className='rounded-xl'>
+                    <SelectContent className='rounded'>
                         <SelectItem value='90d' className='rounded-lg'>
                             Last 3 months
                         </SelectItem>

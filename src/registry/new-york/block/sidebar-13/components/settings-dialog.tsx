@@ -105,7 +105,7 @@ export function SettingsDialog() {
                         </header>
                         <div className='flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0'>
                             {Array.from({ length: 10 }).map((_, i) => (
-                                <div key={i} className='aspect-video max-w-3xl rounded-xl bg-muted/50' />
+                                <div key={i} className='aspect-video max-w-3xl rounded bg-muted/50' />
                             ))}
                         </div>
                     </main>

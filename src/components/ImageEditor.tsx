@@ -16,7 +16,7 @@ function ImageEditor({ profileImage, onSave }: { profileImage: string; onSave: (
   };
 
   return (
-    <div className="relative w-64 h-64 rounded-full overflow-hidden border border-gray-300 dark:border-zinc-700">
+    <div className="relative w-64 h-64 rounded-full overflow-hidden border border-gray-300 dark:border-neutral-700">
       <div
         className="absolute inset-0 cursor-move"
         style={{

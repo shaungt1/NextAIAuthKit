@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/registry/default/ui/button';
+import { buttonVariants } from '@/registry/new-york/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/registry/new-york/ui/tooltip';
 
 import { LucideIcon } from 'lucide-react';

@@ -139,13 +139,13 @@
 
 //     if (status === 'loading') return <p>Loading...</p>;
 //     return (
-//         <div className='flex min-h-screen flex-col items-center bg-background p-6 pt-24 text-foreground dark:bg-zinc-950 dark:text-zinc-100'>
+//         <div className='flex min-h-screen flex-col items-center bg-background p-6 pt-24 text-foreground dark:bg-neutral-950 dark:text-neutral-100'>
 //             {/* Page Title */}
 //             <h1 className='mb-10 text-3xl font-bold'>Edit Profile</h1>
 
 //             <form
 //                 onSubmit={handleUpdateProfile}
-//                 className='w-full max-w-3xl space-y-8 rounded-lg bg-card p-6 shadow-lg dark:bg-zinc-900'>
+//                 className='w-full max-w-3xl space-y-8 rounded-lg bg-card p-6 shadow-lg dark:bg-neutral-900'>
 //                 {/* Top Section: Profile Header */}
 //                 <div className='mb-8 flex items-center gap-6'>
 //                     {/* Profile Picture */}
@@ -153,7 +153,7 @@
 //                         <img
 //                             src={formData.image || 'https://via.placeholder.com/150'}
 //                             alt='Profile'
-//                             className='h-32 w-32 rounded-full border-4 border-card shadow-md dark:border-zinc-700'
+//                             className='h-32 w-32 rounded-full border-4 border-card shadow-md dark:border-neutral-700'
 //                         />
 //                         <Button
 //                             type='button'
@@ -207,7 +207,7 @@
 //                                 value={formData.role}
 //                                 readOnly
 //                                 // className='input-class bg-muted-foreground/10'
-//                                 className="w-full p-2 border rounded-lg dark:bg-zinc-800"
+//                                 className="w-full p-2 border rounded-lg dark:bg-neutral-800"
 //                             />
 //                         </div>
 //                         <div>

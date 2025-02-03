@@ -5,7 +5,7 @@
     "website": "",
     "license": "MIT",
     "scripts": {
-        "dev": "next dev --turbopack --port 1920",
+        "dev": "next dev --turbopack --port 1880",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
