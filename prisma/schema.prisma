@@ -35,7 +35,7 @@ model User {
   website      String?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  
+  image        String?
   accounts     Account[]
   ownedGroups  Group[]
   groups       GroupUser[]

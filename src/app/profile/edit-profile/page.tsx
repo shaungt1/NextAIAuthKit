@@ -9,7 +9,7 @@ import { Camera, Edit, Facebook, Instagram, Link, Linkedin, Mail, MapPin, Phone,
 import { signOut, useSession } from 'next-auth/react';
 import ImageEditorModal from '@/components/image/ImageEditorModal';
 import { off } from 'process';
-import SecuritySection from '@/app/utils/SecuritySection';
+import SecuritySection from '@/app/auth/security/SecuritySection';
 
 export default function EditProfilePage() {
     const { data: session, status } = useSession({

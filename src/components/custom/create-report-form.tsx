@@ -1,18 +1,50 @@
-import { useState } from "react";
+import { useState, JSX } from "react";
 import { Button } from "@/registry/ui/button";
 import { Input } from "@/registry/ui/input";
 import { Textarea } from "@/registry/ui/textarea";
 import { Card } from "@/registry/ui/card";
-import { Stepper } from "../stepper/stepper";
+// import { Stepper } from "../stepper/stepper";
 import { Bot, BotCard } from "./bot-card";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/registry/ui/alert";
 
 const STEPS = [
-  "Basic Information",
-  "Configure Bots",
-  "Review & Create"
+  { step: 0, title: "Basic Information", description: "Enter the basic information for the report", icon: <AlertCircle />, markdown: "" },
+  { step: 1, title: "Configure Bots", description: "Configure the data and report bots", icon: <AlertCircle />, markdown: "" },
+  { step: 2, title: "Review & Create", description: "Review your report configuration and create the report", icon: <AlertCircle />, markdown: "" }
 ];
+
+
+
+
+export interface StepperProps {
+  steps: {
+    step: number;
+    title: string;
+    description: string;
+    icon: JSX.Element;
+    markdown: string;
+  }[];
+  currentStep: number;
+  onStepClick: (step: number) => void;
+}
+
+export function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
+  return (
+    <div>
+      {steps.map((step) => (
+        <button
+          key={step.step}
+          onClick={() => onStepClick(step.step)}
+          className={`step-button ${currentStep === step.step ? "active" : ""}`}
+        >
+          {step.icon} {step.title}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 
 export function CreateReportForm() {
   const [currentStep, setCurrentStep] = useState(0);

@@ -148,7 +148,7 @@ export const colors = {
             hsl: 'hsl(224,71.4%,4.1%)'
         }
     ],
-    neutral: [
+    neutrals: [
         {
             scale: 50,
             hex: '#fafafa',
@@ -216,7 +216,7 @@ export const colors = {
             hsl: 'hsl(240,10%,3.9%)'
         }
     ],
-    neutral: [
+    neutral2: [
         {
             scale: 50,
             hex: '#fafafa',
@@ -284,7 +284,7 @@ export const colors = {
             hsl: 'hsl(0,0%,3.9%)'
         }
     ],
-    neutral: [
+    neutral1: [
         {
             scale: 50,
             hex: '#fafaf9',

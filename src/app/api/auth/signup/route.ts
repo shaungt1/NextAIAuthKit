@@ -43,7 +43,7 @@ export async function POST(req: Request) {
           email,
           role: role || "USER", 
           name: null, // Name will be updated during the SSO callback
-          image: null, // Profile picture will be updated during the SSO callback
+          // Profile picture will be updated during the SSO callback
           accounts: {
             create: {
               provider: 'google',
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
         id: user.id,
         email: user.email,
         name: user.name,
-        image: user.image,
+        image: user.profileImage?.toString() || null,
         role: user.role,
       },
     }, { status: 201 });
