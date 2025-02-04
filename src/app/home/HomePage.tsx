@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
-import ExtensionDetails from '@/app/HomePage/ExtensionDetails';
-import SetupDetails from '@/app/HomePage/SetupDetails';
+import ExtensionDetails from '@/app/home/ExtensionDetails';
+import SetupDetails from '@/app/home/SetupDetails';
 
 const HomePage: React.FC = () => {
     return (

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import NavigationLinks from '@/app/HomePage/NavigationLinks';
-import ThemeSwitch from '@/app/HomePage/ThemeSwitch';
+import NavigationLinks from '@/components/navbar/NavigationLinks';
+import ThemeSwitch from '@/app/home/ThemeSwitch';
 
 const NavigationBar = () => {
     return (

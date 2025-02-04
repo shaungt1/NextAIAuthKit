@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { ThemeProvider } from 'next-themes';
-import NavigationBar from '@/app/HomePage/NavigationBar';
+import NavigationBar from '@/components/navbar/NavigationBar';
 import '@/app/index.css';
 import SessionProviderWrapper from '@/providers/SessionProviderWrapper';
 

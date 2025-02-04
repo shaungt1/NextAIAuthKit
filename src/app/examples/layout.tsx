@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 
-import { ExamplesNav } from '@/components/examples-nav';
-import { PageActions, PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header';
+import { ExamplesNav } from '@/navigation/examples-nav';
+import { PageActions, PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/utils/page-header';
 import { Button, buttonVariants } from '@/registry/new-york/ui/button';
 
 export const metadata: Metadata = {

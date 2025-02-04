@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { useMediaQuery } from '@/app/hooks/use-media-query';
 import { Button } from '@/registry/new-york/ui/button';
 import {
     Command,

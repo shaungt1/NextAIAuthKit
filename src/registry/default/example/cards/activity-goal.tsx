@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { useTheme } from 'next-themes';
 
-import { useConfig } from '@/hooks/use-config';
+import { useConfig } from '@/app/hooks/use-config';
 import { Button } from '@/registry/default/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/registry/default/ui/card';
 import { baseColors } from '@/registry/registry-base-colors';

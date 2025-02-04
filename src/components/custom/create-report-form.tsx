@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/registry/ui/button";
+import { Input } from "@/registry/ui/input";
+import { Textarea } from "@/registry/ui/textarea";
+import { Card } from "@/registry/ui/card";
 import { Stepper } from "./stepper";
 import { Bot, BotCard } from "./bot-card";
 import { AlertCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/registry/ui/alert";
 
 const STEPS = [
   "Basic Information",

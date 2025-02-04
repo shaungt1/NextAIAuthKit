@@ -1,6 +1,6 @@
 import { useTheme } from 'next-themes';
 
-import { useConfig } from '@/hooks/use-config';
+import { useConfig } from '@/app/hooks/use-config';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/registry/new-york/ui/card';
 import { baseColors } from '@/registry/registry-base-colors';
 

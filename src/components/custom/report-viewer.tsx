@@ -1,5 +1,5 @@
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card } from "@/registry/ui/card";
+import { Progress } from "@/registry/ui/progress";
 import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 

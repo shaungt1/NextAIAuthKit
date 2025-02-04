@@ -1,4 +1,4 @@
-import { useMounted } from '@/hooks/use-mounted';
+import { useMounted } from '@/app/hooks/use-mounted';
 import { ColorFormat } from '@/lib/colors';
 
 import { useAtom } from 'jotai';

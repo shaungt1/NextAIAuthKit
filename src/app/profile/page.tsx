@@ -5,7 +5,7 @@ import { useSession, signOut } from "next-auth/react";
 import { Card } from "@/registry/new-york/ui/card";
 import { Button } from "@/registry/new-york/ui/button";
 import Link from "next/link";
-import ImageEditorModal from '@/components/ImageEditorModal';
+import ImageEditorModal from '@/components/image/ImageEditorModal';
 import {
   Settings,
   LogOut,

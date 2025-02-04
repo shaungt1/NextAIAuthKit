@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { useMutationObserver } from '@/hooks/use-mutation-observer';
+import { useMutationObserver } from '@/app/hooks/use-mutation-observer';
 import { cn } from '@/lib/utils';
 import { Button } from '@/registry/new-york/ui/button';
 import {

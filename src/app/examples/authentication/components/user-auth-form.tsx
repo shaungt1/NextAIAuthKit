@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { Icons } from '@/components/icons';
+import { Icons } from '@/utils/icons';
 import { cn } from '@/lib/utils';
 import { Button } from '@/registry/new-york/ui/button';
 import { Input } from '@/registry/new-york/ui/input';
