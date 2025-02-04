@@ -3,7 +3,7 @@ import { Button } from "@/registry/ui/button";
 import { Input } from "@/registry/ui/input";
 import { Textarea } from "@/registry/ui/textarea";
 import { Card } from "@/registry/ui/card";
-import { Stepper } from "./stepper";
+import { Stepper } from "../stepper/stepper";
 import { Bot, BotCard } from "./bot-card";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/registry/ui/alert";
