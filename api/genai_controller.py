@@ -1,12 +1,11 @@
 import os
 import asyncio
-from pathlib import Path
-from datetime import datetime
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_community.document_loaders import TextLoader
 
+# GENERITIVE AI CONTROLLER
 # Set the path to the root of the repository relative to this script's location
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 

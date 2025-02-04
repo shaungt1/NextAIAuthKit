@@ -1,11 +1,12 @@
 import os
-import asyncio
+import asyncio 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 
-from .genai_controller import LLMBot
+from genai_controller import LLMBot
 
+# MAIN FASTAPI APP MAIN.PY
 
 app = FastAPI()
 

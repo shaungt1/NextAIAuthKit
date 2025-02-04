@@ -1,37 +1,37 @@
 #!/bin/bash
 
-echo "🐍 FastAPI Setup Script"
+echo "🐍 Setting up FastAPI with Virtual Environment (PYENV)..."
 
-# Check if Python is installed
-if ! command -v python3 &>/dev/null; then
-    echo "❌ Python3 is not installed. Please install Python3 and rerun this script."
-    exit 1
-fi
+# Define virtual environment name
+VENV_NAME="PYENV"
 
-echo "✅ Python3 detected."
-
-# Create a virtual environment if not exists
-if [ ! -d "venv" ]; then
-    echo "🔧 Creating virtual environment..."
-    python3 -m venv venv
+# Create virtual environment if it doesn't exist
+if [ ! -d "$VENV_NAME" ]; then
+    echo "🔧 Creating virtual environment ($VENV_NAME)..."
+    python -m venv "$VENV_NAME"
 else
-    echo "✅ Virtual environment detected, skipping creation."
+    echo "✅ Virtual environment ($VENV_NAME) already exists."
 fi
 
-# Activate virtual environment
-if [[ "$PLATFORM" == "Windows" ]]; then
-    source venv/Scripts/activate
+# Detect OS and activate the virtual environment
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+    # Windows (Git Bash)
+    source "$VENV_NAME/Scripts/activate"
 else
-    source venv/bin/activate
+    # Linux/macOS
+    source "$VENV_NAME/bin/activate"
 fi
+
+echo "✅ Virtual environment ($VENV_NAME) activated."
 
 # Install dependencies
-echo "📦 Installing Python dependencies..."
-pip install -r fastapi/requirements.txt
+echo "📦 Installing dependencies..."
+pip install --upgrade pip
+pip install -r api/requirements.txt
 
-# Start FastAPI
+# Change directory to API and start FastAPI server
+cd api || exit
 echo "🚀 Starting FastAPI Server..."
-cd fastapi
-uvicorn main:app --reload --port 8000 &
+python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 echo "✅ FastAPI running at http://localhost:8000"
