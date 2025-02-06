@@ -3,6 +3,7 @@ import asyncio
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
 
 from genai_controller import LLMBot
 
@@ -10,6 +11,14 @@ from genai_controller import LLMBot
 
 app = FastAPI()
 
+# Allow frontend to communicate with FastAPI
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow requests from any origin (for development)
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 class ChatRequest(BaseModel):
     """
     ChatRequest defines the schema for incoming JSON data. The user can optionally provide a
