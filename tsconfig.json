@@ -33,7 +33,7 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts"
-, "src/app/api/test/test.js"    ],
+, "src/app/api/test/test.js", "src/utils/assignAdmin.js"    ],
     "exclude": [
         "node_modules"
     ]

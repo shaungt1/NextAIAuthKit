@@ -21,6 +21,7 @@ langserve[all]
 logfire
 openai
 pandas
+prisma
 psycopg2
 pydantic
 pytest

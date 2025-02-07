@@ -7,40 +7,39 @@ datasource db {
   url      = "file:./app_db.sqlite"
 }
 
-
-
 model User {
-  id           String       @id @default(uuid())
-  email        String       @unique
-  name         String?
-  password     String?
-  profileImage Bytes?
-  imageOffsetX  Float?   // X-offset for the image position
-  imageOffsetY  Float?   // Y-offset for the image position
-  imageZoom     Float?   // Zoom level for the image
-  role         String?      @default("USER")
-  location     String?
-  latitude     Float?
-  longitude    Float?
-  ipAddress    String?
-  geodata      String? 
-  phone        String?
-  bio          String?
-  title        String?
-  facebook     String?
-  instagram    String?
-  twitter      String?
-  youtube      String?
-  linkedin     String?
-  website      String?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  image        String?
-  accounts     Account[]
-  ownedGroups  Group[]
-  groups       GroupUser[]
-  sessions     Session[]
-  userImages   UserImages[]
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String?
+  password      String?
+  profileImage  Bytes?
+  imageOffsetX  Float? // X-offset for the image position
+  imageOffsetY  Float? // Y-offset for the image position
+  imageZoom     Float? // Zoom level for the image
+  role          String?        @default("USER")
+  location      String?
+  latitude      Float?
+  longitude     Float?
+  ipAddress     String?
+  geodata       String?
+  phone         String?
+  bio           String?
+  title         String?
+  facebook      String?
+  instagram     String?
+  twitter       String?
+  youtube       String?
+  linkedin      String?
+  website       String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  image         String?
+  accounts      Account[]
+  ownedGroups   Group[]
+  groups        GroupUser[]
+  sessions      Session[]
+  userImages    UserImages[]
+  conversations Conversation[]
 }
 
 model UserImages {
@@ -98,4 +97,16 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id])
+}
+
+model Conversation {
+  id                 String   @id @default(cuid())
+  conversationId     String   @unique @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id])
+  // Store JSON as a string since SQLite doesn't support 'Json' type
+  conversationSchema String?
+  conversationData   String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }

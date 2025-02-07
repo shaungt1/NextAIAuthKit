@@ -32,7 +32,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <ThemeProvider attribute='class'>
           <SessionProviderWrapper>
             <NavigationBar />
+            <div className="pt-[68px] min-h-screen flex flex-col">
             {children}
+            </div>
           </SessionProviderWrapper>
         </ThemeProvider>
       </body>

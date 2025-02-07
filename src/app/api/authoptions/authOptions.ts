@@ -64,6 +64,7 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async session({ session, token }) {
+      console.log("📢 [AUTH CALLBACK] Session Object Before:", session);
       if (token) {
         session.user = {
           ...session.user,
@@ -72,10 +73,11 @@ export const authOptions: AuthOptions = {
           provider: typeof token.provider === "string" ? token.provider : null,
         };
       }
-      console.log("[Session Callback] Session updated with token:", session);
+      console.log("[Session Callback] Session updated after with token:", session);
       return session;
     },
     async jwt({ token, user, account }) {
+      console.log("📢 [AUTH CALLBACK] JWT Before:", token);
       if (user) {
         token.id = user.id;
         token.role = (user as any).role || "user";

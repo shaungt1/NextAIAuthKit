@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_community.document_loaders import TextLoader
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 # GENERITIVE AI CONTROLLER
 # Set the path to the root of the repository relative to this script's location
@@ -14,7 +15,7 @@ dotenv_path = os.path.join(ROOT_DIR, '.env')
 load_dotenv(dotenv_path)
 
 # Debug: Confirm the environment variable is loaded
-print(f"OPENAI_API_KEY loaded: {os.getenv('OPENAI_API_KEY')}")
+print(f"✅ API Key Loaded: {bool(os.getenv('OPENAI_API_KEY'))}")
 
 def load_text(input_value: str) -> str:
     """
@@ -38,11 +39,40 @@ class LLMBot:
     this basic design, once the program terminates or the instance is discarded, 
     conversation state is lost unless otherwise preserved.
     """
-    def __init__(self, api_key: str, model_name: str = "gpt-4o", system_prompt: str = None):
+
+    def __init__(self, api_key: str, model_name: str = "gpt-4o", system_prompt: str = None, 
+                 temperature: float = 0.0, top_p: float = 1.0, max_length: int = 4096, streaming: bool = True):
+        """
+        Initializes the LLMBot with API key, model parameters, and an optional system prompt.
+        
+        Args:
+            api_key (str): The API key required to interact with OpenAI's model.
+            model_name (str): The name of the model to use (default is "gpt-4o").
+            system_prompt (str, optional): Initial system prompt for the conversation (default is None).
+            temperature (float, optional): Sampling temperature for randomness in responses (default is 0.7).
+            top_p (float, optional): Probability mass for nucleus sampling (default is 1.0).
+            max_length (int, optional): Maximum number of tokens in responses (default is 4096).
+            streaming (bool, optional): Whether to use streaming responses (default is True).
+        """
         if not api_key:
             raise ValueError("An API key is required to initialize the bot.")
+
         self.api_key = api_key
-        self.model = ChatOpenAI(model=model_name, api_key=api_key)
+        self.temperature = temperature
+        self.top_p = top_p
+        self.max_length = max_length
+        self.streaming = streaming
+        
+       
+        self.model = ChatOpenAI(
+            model=model_name, 
+            api_key=api_key,
+            streaming=self.streaming,
+            temperature=self.temperature,
+            top_p=self.top_p,
+            max_completion_tokens=self.max_length
+        )
+  
         self.conversation = []
 
         # If a system prompt is provided (plain text or file path), load it appropriately.
@@ -50,7 +80,9 @@ class LLMBot:
             prompt_text = load_text(system_prompt)
             self.conversation.append(SystemMessage(content=prompt_text))
 
-    async def send_message(self, user_input: str) -> str:
+
+    async def send_message(self, user_input: str):
+
         """
         This asynchronous method processes a user input message, which may be plain text or a file path.
         It appends the message to the conversation as a HumanMessage, streams the language model's response
@@ -61,13 +93,14 @@ class LLMBot:
         human_message = HumanMessage(content=user_text)
         self.conversation.append(human_message)
 
-        full_response = ""
+
+
+        # Send the user input to the model and stream the response in real time
         async for response in self.model.astream(self.conversation):
-            print(response.content, end='', flush=True)
-            full_response += response.content
+            yield response  # Yield each chunk instead of returning full response
         
-        self.conversation.append(AIMessage(content=full_response))
-        return full_response
+        self.conversation.append(AIMessage(content="".join([chunk.content async for chunk in self.model.astream(self.conversation)])))
+
 
     def reset_conversation(self, system_prompt: str = None):
         """
@@ -79,6 +112,17 @@ class LLMBot:
             prompt_text = load_text(system_prompt)
             self.conversation.append(SystemMessage(content=prompt_text))
 
+
+
+
+
+
+
+# =================================================================================================
+# /api/main.py
+# MAIN FUNCTION
+# This main function demonstrates how to use the LLMBot with environment variables.
+# =================================================================================================
 async def main():
     """
     Demonstration of how to use the LLMBot with environment variables. You can specify 
@@ -98,4 +142,7 @@ async def main():
     print("\n\nFinal Response:", response)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except RuntimeError:
+        print("⚠️ Event loop already running. Run `await main()` in an async environment.")

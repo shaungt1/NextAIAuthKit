@@ -5,8 +5,8 @@ import ThemeSwitch from '@/app/theme/ThemeSwitch';
 
 const NavigationBar = () => {
     return (
-        <div className="fixed top-0 mb-3 left-0 right-0 z-50 w-full dark:bg-neutral-900 bg-white shadow-md">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 pb-3 py-3 sm:px-6 lg:px-8">
+        <div className="fixed top-0 left-0 right-0 z-50 w-full h-[64px] dark:bg-neutral-900 bg-white shadow-md">
+            <div className="relative mx-auto flex max-w-7xl items-center justify-between px-4 pb-3 py-3 sm:px-6 lg:px-8">
                 {/* Navigation Links */}
                 <NavigationLinks />
 
