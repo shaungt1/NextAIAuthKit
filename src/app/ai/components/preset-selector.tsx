@@ -18,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/registry/new-york/ui/
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { PopoverProps } from '@radix-ui/react-popover';
 
-import { Preset } from '../data/presets';
+import { Preset } from '../../../data/presets/presets';
 
 interface PresetSelectorProps extends PopoverProps {
     presets: Preset[];

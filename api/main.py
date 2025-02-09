@@ -28,6 +28,7 @@ class ChatRequest(BaseModel):
     """
     ChatRequest schema for incoming JSON data.
     """
+    model_name: Optional[str] = None
     system_prompt: Optional[str] = None
     user_input: str
     temperature: Optional[float] = 0.7
@@ -49,6 +50,7 @@ async def chat_endpoint(request: ChatRequest):
 
     # Create the bot with the system prompt (if present).
     bot = LLMBot(
+          model_name=request.model_name or "gpt-4o", 
         api_key=api_key,
         system_prompt=request.system_prompt,
         temperature=request.temperature,

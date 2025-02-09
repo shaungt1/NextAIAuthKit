@@ -16,6 +16,7 @@ interface Message {
 }
 
 interface AIChatWindowProps {
+    modelName?: string;
     systemPrompt?: string;
     temperature?: number;
     maxLength?: number;
@@ -25,6 +26,7 @@ interface AIChatWindowProps {
 }
 
 export default function AIChatWindow({
+    modelName = 'gpt-4o',
     systemPrompt = 'You are an AI assistant',
     temperature = 0.7,
     maxLength = 256,
@@ -104,11 +106,27 @@ export default function AIChatWindow({
         setInput('');
         setLoading(true);
 
+            // ✅ Create the payload object to track the chat session
+        const payload = {
+            modelName,
+            user_input: input,
+            system_prompt: systemPrompt,
+            temperature,
+            max_tokens: maxLength,
+            top_p: topP,
+            frequency_penalty: frequencyPenalty,
+            conversation_id: conversationId,
+        };
+         // ✅ Log the payload before sending
+         console.log("🔹 Payload being sent to API:", payload);
+         console.log("📝 Type of Payload:", typeof payload);
+         
         try {
             const response = await fetch('http://localhost:8000/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    modelName,
                     user_input: input,
                     system_prompt: systemPrompt,
                     temperature,
@@ -118,7 +136,8 @@ export default function AIChatWindow({
                     conversation_id: conversationId,
                 })
             });
-
+           
+                    
             if (!response.body) throw new Error("⚠️ No response body received.");
 
             const reader = response.body.getReader();

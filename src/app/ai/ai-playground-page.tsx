@@ -19,8 +19,8 @@ import { PresetSelector } from './components/preset-selector';
 import { PresetShare } from './components/preset-share';
 import { TemperatureSelector } from './components/temperature-selector';
 import { TopPSelector } from './components/top-p-selector';
-import { models, types } from './data/models';
-import { presets } from './data/presets';
+import { models, types } from '../../data/llm-models/models';
+import { presets } from '../../data/presets/presets';
 import { useState, useEffect} from 'react';
 
 
@@ -32,13 +32,14 @@ export const metadata: Metadata = {
 };
 
 export default function AIPlaygroundPage() {
-
+    
+    const [modelName, setModelName] = useState<string>(models[0].name); 
     const [temperature, setTemperature] = useState(0.7);
     const [maxLength, setMaxLength] = useState(256);
     const [topP, setTopP] = useState(0.9);
     const [systemPrompt, setSystemPrompt] = useState('You are an AI assistant');
     const [streaming, setstreaming] = useState(false); 
-
+  
     useEffect(() => {
         console.log('Temperature:', temperature);
     }, [temperature]);
@@ -238,7 +239,14 @@ export default function AIPlaygroundPage() {
                                         </TabsTrigger>
                                     </TabsList>
                                 </div>
-                                <ModelSelector types={types} models={models} />
+                                <ModelSelector
+                                    types={types}
+                                    models={models}
+                                    onModelSelect={(model) => {
+                                        setModelName(model.name); 
+                                        console.log("Model selected in AIPlaygroundPage:", model.name);  
+                                    }}
+                                />
                                 <TemperatureSelector defaultValue={[temperature]} onValueChange={setTemperature} />
                                 <MaxLengthSelector defaultValue={[maxLength]} onValueChange={setMaxLength} />
                                 <TopPSelector defaultValue={[topP]} onValueChange={setTopP} />
@@ -246,13 +254,13 @@ export default function AIPlaygroundPage() {
                             <div className='md:order-1'>
                                 <TabsContent value='complete' className='mt-0 border-0 p-0'>
                                        <div className='flex h-[32rem] flex-col space-y-4'>
-                                       <AIChatWindow systemPrompt={systemPrompt} temperature={temperature} maxLength={maxLength} topP={topP} />
+                                       <AIChatWindow modelName={modelName}  systemPrompt={systemPrompt} temperature={temperature} maxLength={maxLength} topP={topP} />
                                        </div>
                                 </TabsContent>
                                 <TabsContent value='insert' className='mt-0 border-0 p-0'>
                                     <div className='flex flex-col space-y-4'>
                                         <div className='grid h-full grid-rows-2 gap-6 lg:grid-cols-2 lg:grid-rows-1'>
-                                        <AIChatWindow systemPrompt={systemPrompt} temperature={temperature} maxLength={maxLength} topP={topP} />
+                                        <AIChatWindow modelName={modelName} systemPrompt={systemPrompt} temperature={temperature} maxLength={maxLength} topP={topP} />
                                             <div className='rounded-md border bg-muted'></div>
                                         </div>
                                         <div className='flex items-center space-x-2'>
@@ -270,7 +278,7 @@ export default function AIPlaygroundPage() {
                                             <div className='flex flex-col space-y-4'>
                                                 <div className='flex flex-1 flex-col space-y-2'>
                                                     <Label htmlFor='input'>Input</Label>
-                                                    <AIChatWindow systemPrompt={systemPrompt} temperature={temperature} maxLength={maxLength} topP={topP} />
+                                                    <AIChatWindow modelName={modelName} systemPrompt={systemPrompt} temperature={temperature} maxLength={maxLength} topP={topP} />
                                                 </div>
                                                 <div className='flex flex-col space-y-2'>
                                                     <Label htmlFor='instructions'>Instructions</Label>

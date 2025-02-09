@@ -55,7 +55,7 @@ class LLMBot:
     def __init__(
         self,
         api_key: str,
-        model_name: str = "gpt-4o",
+        model_name: str = None,
         system_prompt: str = None,
         temperature: float = 0.0,
         top_p: float = 1.0,
@@ -65,12 +65,13 @@ class LLMBot:
     ):
         if not api_key:
             raise ValueError("An API key is required to initialize the bot.")
-
+        
+        model_name = model_name or "gpt-4o"
         # Lazily initialize the global LLM if it's still None:
         global GLOBAL_LLM
         if GLOBAL_LLM is None:
             GLOBAL_LLM = ChatOpenAI(
-                model=model_name,
+                model=model_name, 
                 api_key=api_key,
                 streaming=streaming,
                 temperature=temperature,

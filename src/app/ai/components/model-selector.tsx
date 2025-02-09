@@ -19,11 +19,12 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/registry/new-york/ui/
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { PopoverProps } from '@radix-ui/react-popover';
 
-import { Model, ModelType } from '../data/models';
+import { Model, ModelType } from '../../../data/llm-models/models';
 
 interface ModelSelectorProps extends PopoverProps {
     types: readonly ModelType[];
     models: Model[];
+    onModelSelect: (model: Model) => void;  // ✅ Ensure this prop is defined
 }
 
 export function ModelSelector({ models, types, ...props }: ModelSelectorProps) {
@@ -85,7 +86,9 @@ export function ModelSelector({ models, types, ...props }: ModelSelectorProps) {
                                                     onPeek={(model) => setPeekedModel(model)}
                                                     onSelect={() => {
                                                         setSelectedModel(model);
+                                                        props.onModelSelect(model); // ✅ Call the function passed from parent
                                                         setOpen(false);
+                                                        console.log("Selected Model:", model); // ✅ Console log to verify
                                                     }}
                                                 />
                                             ))}

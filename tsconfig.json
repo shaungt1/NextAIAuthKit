@@ -33,7 +33,7 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts"
-, "src/app/api/test/test.js", "src/utils/assignAdmin.js"    ],
+, "src/app/api/test/test.js", "src/utils/assignAdmin.js", "setup/index.js", "setup/loadAuth.js", "setup/loadModels.Js", "setup/loadPromtps.js","setup/loadAIConfig.js", "setup/loadUsers.js",],
     "exclude": [
         "node_modules"
     ]

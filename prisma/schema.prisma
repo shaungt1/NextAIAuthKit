@@ -110,3 +110,30 @@ model Conversation {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 }
+model LLM {
+  id              String   @id @default(uuid())
+  name            String   @unique
+  description     String
+  provider        String
+  version        String
+  type            String
+  temperature     Float
+  maxTokens       Int
+  topP            Float
+  frequencyPenalty Float
+  presencePenalty Float
+  models          Model[]
+}
+
+model Model {
+  id              String   @id @default(uuid())
+  name            String   @unique
+  description     String
+  type            String
+  inputCost       Float?
+  cachedInputCost Float?
+  outputCost      Float?
+  totalCost       Float?
+  llmId           String?
+  llm             LLM?     @relation(fields: [llmId], references: [id], onDelete: Cascade)
+}
