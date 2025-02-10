@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@/registry/new-york/ui/button';
-import { CounterClockwiseClockIcon } from '@radix-ui/react-icons';
 import { Input } from '@/registry/new-york/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/registry/new-york/ui/card';
 import { Separator } from '@/registry/new-york/ui/separator';
@@ -39,7 +38,12 @@ export default function AIChatWindow({
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isChatActive, setIsChatActive] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // 🔹 Define inactivity timeout (1 min 15 sec) from environment variable
+    const INACTIVITY_TIMEOUT = Number(process.env.NEXT_PUBLIC_INACTIVITY_TIMEOUT) || 75000;
+    let inactivityTimer: NodeJS.Timeout | null = null;
 
     useEffect(() => {
         // Auto-scroll to the bottom when messages update
@@ -50,7 +54,7 @@ export default function AIChatWindow({
         async function initializeConversation() {
             if (!session?.user) {
                 console.warn("🔹 User is not logged in. Using test conversation ID.");
-                const testConversationId = process.env.NEXT_PUBLIC_TEST_CONVERSATION_ID || uuidv4();
+                const testConversationId = uuidv4();
                 setConversationId(testConversationId);
                 sessionStorage.setItem("conversationId", testConversationId);
                 return;
@@ -64,63 +68,89 @@ export default function AIChatWindow({
                 return;
             }
 
-            try {
-                console.log("🔍 Checking database for existing conversation...");
-                const response = await fetch(`/api/conversations?userId=${session.user.id}`);
-                const data = await response.json();
-
-                if (data.conversationId) {
-                    console.log("✅ Found existing conversation ID:", data.conversationId);
-                    setConversationId(data.conversationId);
-                    sessionStorage.setItem("conversationId", data.conversationId);
-                } else {
-                    console.log("🚀 No existing conversation. Generating new conversation ID.");
-                    const newConversationId = uuidv4();
-
-                    await fetch(`/api/conversations`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            userId: session.user.id,
-                            conversationId: newConversationId,
-                        }),
-                    });
-
-                    setConversationId(newConversationId);
-                    sessionStorage.setItem("conversationId", newConversationId);
-                }
-            } catch (error) {
-                console.error("⚠️ Error fetching conversation ID:", error);
-            }
+            // Generate a new conversation ID if none exists
+            console.log("🚀 Starting new conversation...");
+            const newConversationId = uuidv4();
+            setConversationId(newConversationId);
+            sessionStorage.setItem("conversationId", newConversationId);
         }
 
         initializeConversation();
+        resetInactivityTimer();
+
+        return () => {
+            if (inactivityTimer) clearTimeout(inactivityTimer);
+        };
     }, [session]);
 
+    // 🔹 Reset inactivity timer on user action
+    const resetInactivityTimer = () => {
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(endChat, INACTIVITY_TIMEOUT);
+    };
+
+
+
+
+    // 🔹 Save conversation and clear session storage when chat ends
+    const endChat = async () => {
+        if (!conversationId || !session?.user?.id) return;
+    
+        console.log("⏳ Ending chat and saving...");
+    
+        // 🔹 Make sure we capture the latest messages before clearing state
+        const latestMessages = [...messages];
+    
+        // Structure conversation data with full history
+        const conversationData = JSON.stringify(latestMessages);
+        const payload = {
+            conversationId,
+            userId: session.user.id,
+            conversationData
+        };
+    
+        console.log("📜 SAVING CONVERSATION DATA:", payload);
+    
+        try {
+            // ✅ Ensure conversation is fully saved before clearing state
+            const response = await fetch('/api/conversations/save-conversation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+    
+            if (!response.ok) throw new Error("⚠️ Failed to save conversation");
+    
+            console.log("✅ Conversation saved successfully");
+    
+            // 🔹 Clear sessionStorage only after save confirmation
+            sessionStorage.removeItem("conversationId");
+            setConversationId('');
+            setMessages([]); // Clear chat window
+            setIsChatActive(false);
+        } catch (error) {
+            console.error("⚠️ Error saving conversation:", error);
+        }
+    };
+    
+
+
+
+    //Send message to AI model
     const sendMessage = async () => {
         if (!input.trim()) return;
 
         const timestamp = new Date().toLocaleTimeString();
-        const newMessage: Message = { role: 'user', content: input, timestamp };
-        setMessages((prev) => [...prev, newMessage]);
+        const userMessage: Message = { role: 'user', content: input, timestamp };
+
+        // Append user message to chat
+        setMessages((prev) => [...prev, userMessage]);
         setInput('');
         setLoading(true);
+        setIsChatActive(true);
 
-            // ✅ Create the payload object to track the chat session
-        const payload = {
-            modelName,
-            user_input: input,
-            system_prompt: systemPrompt,
-            temperature,
-            max_tokens: maxLength,
-            top_p: topP,
-            frequency_penalty: frequencyPenalty,
-            conversation_id: conversationId,
-        };
-         // ✅ Log the payload before sending
-         console.log("🔹 Payload being sent to API:", payload);
-         console.log("📝 Type of Payload:", typeof payload);
-         
+        resetInactivityTimer(); // Restart inactivity timer
+
         try {
             const response = await fetch('http://localhost:8000/chat', {
                 method: 'POST',
@@ -134,34 +164,34 @@ export default function AIChatWindow({
                     top_p: topP,
                     frequency_penalty: frequencyPenalty,
                     conversation_id: conversationId,
-                })
+                }),
             });
-           
-                    
+
             if (!response.body) throw new Error("⚠️ No response body received.");
 
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let aiResponse = '';
 
+            setMessages((prev) => [...prev, { role: 'ai', content: '', timestamp }]);
+
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
 
-                const chunk = decoder.decode(value, { stream: true });
-                aiResponse += chunk;
+                aiResponse += decoder.decode(value, { stream: true });
 
-                setMessages((prev) => [
-                    ...prev.slice(0, -1),
-                    { role: 'ai', content: aiResponse, timestamp: new Date().toLocaleTimeString() }
-                ]);
+                setMessages((prev) =>
+                    prev.map((msg, index) =>
+                        index === prev.length - 1 && msg.role === 'ai' ? { ...msg, content: aiResponse } : msg
+                    )
+                );
             }
+
+            console.log("📜 FULL CONVERSATION HISTORY:", [...messages, { role: 'user', content: input, timestamp }, { role: 'ai', content: aiResponse, timestamp }]);
+
         } catch (error) {
             console.error("⚠️ Chat API Streaming Error:", error);
-            setMessages((prev) => [
-                ...prev,
-                { role: 'ai', content: '⚠️ Error: Failed to fetch response.', timestamp },
-            ]);
         } finally {
             setLoading(false);
         }
@@ -174,57 +204,22 @@ export default function AIChatWindow({
             </CardHeader>
             <Separator />
 
-            {/* Scrollable Chat Messages */}
             <CardContent className='flex-grow overflow-y-auto p-4 space-y-4'>
-                {messages.length === 0 && (
-                    <p className='text-center text-muted-foreground'>Start a conversation with the AI.</p>
-                )}
-
                 {messages.map((msg, index) => (
-                    <div
-                        key={index}
-                        className={`flex flex-col w-fit max-w-[85%] ${
-                            msg.role === 'user' ? 'ml-auto text-right' : 'text-left'
-                        }`}
-                    >
-                        <span className={`text-xs font-semibold ${msg.role === 'user' ? 'text-zinc-400' : 'text-zinc-400'}`}>
-                            {msg.role === 'user' ? 'You' : 'AI Assistant'}
-                        </span>
-                        <div
-                            className={`p-2 rounded-lg shadow-md ${
-                                msg.role === 'user'
-                                    ? 'bg-secondary text-primary-foreground'
-                                    : 'bg-muted text-muted-foreground'
-                            }`}
-                        >
+                    <div key={index} className={`flex flex-col w-fit max-w-[85%] ${msg.role === 'user' ? 'ml-auto text-right' : 'text-left'}`}>
+                        <span className='text-xs font-semibold text-zinc-400'>{msg.role === 'user' ? 'You' : 'AI Assistant'}</span>
+                        <div className={`p-2 rounded-lg shadow-md ${msg.role === 'user' ? 'bg-secondary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
                             {msg.content}
                         </div>
-                        <span className='text-xs text-gray-400'>{msg.timestamp}</span>
                     </div>
                 ))}
-
-                {/* Auto-scroll anchor */}
                 <div ref={messagesEndRef} />
             </CardContent>
 
-            {/* Chat Input Stays at the Bottom */}
-            <div className='sticky bottom-0 bg-background p-3 border-t flex items-center'>
-                <Input
-                    type='text'
-                    placeholder='Type a message...'
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                    className='flex-1 mr-2'
-                />
-                <Button onClick={sendMessage} disabled={loading}>
-                    {loading ? 'Thinking...' : 'Send'}
-                </Button>
-
-                <Button className='' variant='secondary'>
-                    <span className='sr-only'>Show history</span>
-                    <CounterClockwiseClockIcon className='size-4' />
-                </Button>
+            <div className='sticky bottom-0 p-3 flex items-center'>
+                <Input type='text' value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && sendMessage()} className='flex-1' />
+                <Button onClick={sendMessage} disabled={loading}>{loading ? 'Thinking...' : 'Send'}</Button>
+                {isChatActive && <Button onClick={endChat} variant='secondary'>End Chat</Button>}
             </div>
         </Card>
     );
