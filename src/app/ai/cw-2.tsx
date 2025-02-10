@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -91,20 +92,6 @@ export default function AIChatWindow({
 
 
 
-    const startNewConversation = () => {
-        console.log("🆕 Starting a new conversation...");
-    
-        // Generate a fresh conversation ID
-        const newConversationId = uuidv4();
-        setConversationId(newConversationId);
-        sessionStorage.setItem("conversationId", newConversationId);
-    
-        // Clear chat window and reset state
-        setMessages([]);
-        setIsChatActive(false);
-    };
-    
-
 
     // 🔹 Save conversation and clear session storage when chat ends
     const endChat = async () => {
@@ -139,16 +126,13 @@ export default function AIChatWindow({
     
             // 🔹 Clear sessionStorage only after save confirmation
             sessionStorage.removeItem("conversationId");
-            setConversationId(''); // Clear conversation ID
+            setConversationId('');
             setMessages([]); // Clear chat window
-            setIsChatActive(false); // Disable chat status
-            startNewConversation(); // set a new conversationId
+            setIsChatActive(false);
         } catch (error) {
             console.error("⚠️ Error saving conversation:", error);
         }
     };
-
-  
     
 
 
