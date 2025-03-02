@@ -42,7 +42,7 @@ export function TemperatureSelector({ defaultValue,onValueChange  }: Temperature
                 </HoverCardTrigger>
                 <HoverCardContent align='start' className='w-[260px] text-sm' side='left'>
                     Controls randomness: lowering results in less random completions. As the temperature approaches
-                    zero, the model will become deterministic and repetitive.
+                    zero, the model will become deterministic and repetitive. We find that 0.7 works well for most use cases.
                 </HoverCardContent>
             </HoverCard>
         </div>

@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '../src/app/lib/prisma';
 
 // Prisma Middleware to track changes in LLM models
 prisma.$use(async (params, next) => {

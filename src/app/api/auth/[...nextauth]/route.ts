@@ -11,14 +11,14 @@
 import NextAuth from "next-auth";
 import { authOptions } from '@/app/api/authoptions/authOptions';
 // import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 
-
+// import { prisma } from '@src/lib/prisma';
 // import GoogleProvider from "next-auth/providers/google";
 // import CredentialsProvider from "next-auth/providers/credentials";
 // import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 declare module "next-auth" {
   interface Session {

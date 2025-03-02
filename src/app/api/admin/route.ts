@@ -8,9 +8,9 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/authoptions/authOptions';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+// import { PrismaClient } from '@prisma/client';
+// const prisma = new PrismaClient();
+import { prisma } from '@/app/lib/prisma';
 
 /**
  * Handles GET requests for admin actions.

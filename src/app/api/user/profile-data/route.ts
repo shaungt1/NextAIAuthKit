@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/authoptions/authOptions';
 
-const prisma = new PrismaClient();
+import { prisma } from '@/app/lib/prisma';
 
 /**
  * API Route: GET /api/user/profile-data

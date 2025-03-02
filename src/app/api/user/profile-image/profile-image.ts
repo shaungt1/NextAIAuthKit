@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
-const prisma = new PrismaClient();
+import { prisma } from '@/app/lib/prisma';
 
 /**
  * PATCH /api/user/profile-image

@@ -20,10 +20,15 @@ import { PresetShare } from './components/preset-share';
 import { TemperatureSelector } from './components/temperature-selector';
 import { TopPSelector } from './components/top-p-selector';
 import { models, types } from '../../data/llm-models/models';
-import { presets } from '../../data/presets/presets';
+// import { presets } from '../../data/presets/presets';
 import { useState, useEffect} from 'react';
 
 
+interface Preset {
+    id: any;
+    name: string;
+    description?: string;
+}
 
 
 export const metadata: Metadata = {
@@ -32,13 +37,87 @@ export const metadata: Metadata = {
 };
 
 export default function AIPlaygroundPage() {
-    
-    const [modelName, setModelName] = useState<string>(models[0].name); 
+    const defaultModel = models.length > 0 ? models[0] : { id: 1, name: "GPT-4o" };
+
+    // const [modelName, setModelName] = useState<string>(models[0].name);
+    // const [modelId, setModelId] = useState<number>(parseInt(models[0].id || '1'));  // Ensure it's an integer!
+    const [presets, setPresets] = useState<Preset[]>([]);
     const [temperature, setTemperature] = useState(0.7);
     const [maxLength, setMaxLength] = useState(256);
     const [topP, setTopP] = useState(0.9);
     const [systemPrompt, setSystemPrompt] = useState('You are an AI assistant');
     const [streaming, setstreaming] = useState(false); 
+    const [modelName, setModelName] = useState<string>(defaultModel.name);
+    const [modelId, setModelId] = useState<number>(parseInt(defaultModel.id.toString()) || 1); 
+    const [selectedPreset, setSelectedPreset] = useState<Preset | null>(null);    
+
+    const handlePresetAdded = (newPreset: Preset) => {
+        console.log("🆕 New Preset Added:", newPreset);
+        setPresets((prevPresets) => [newPreset, ...prevPresets]); 
+    };
+    
+    // Fetch presets from API
+useEffect(() => {
+    const fetchPresets = async () => {
+        try {
+            const response = await fetch("/api/presets");
+            if (response.ok) {
+                const data = await response.json();
+                setPresets(data); // ✅ Update presets state
+            } else {
+                console.error("❌ Failed to fetch presets");
+            }
+        } catch (error) {
+            console.error("❌ Error fetching presets:", error);
+        }
+    };
+    fetchPresets();
+}, []);
+
+// Handle deletion
+const handlePresetDeleted = (deletedPresetId: number) => {
+    console.log("🗑️ Removing preset from UI:", deletedPresetId);
+    setPresets((prevPresets) => prevPresets.filter((preset) => preset.id !== deletedPresetId)); // ✅ Remove deleted preset
+};
+
+
+
+    //  Handle Deleteing presets
+    useEffect(() => {
+        console.log("📌 Loading presets...");
+        fetch("/api/presets")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("✅ Presets loaded:", data);
+                setPresets(data);
+            })
+            .catch((error) => console.error("❌ Error loading presets:", error));
+    }, []);
+
+    useEffect(() => {
+        console.log("📌 Selected preset changed in AIPlayground:", selectedPreset);
+    }, [selectedPreset]);
+
+    const handleDeletePreset = (deletedPresetId: number) => {
+        console.log("🗑️ Removing preset from UI:", deletedPresetId);
+        setPresets((prevPresets) => prevPresets.filter((p) => p.id !== deletedPresetId));
+        if (selectedPreset?.id === deletedPresetId) {
+            console.log("🔄 Resetting selectedPreset to null.");
+            setSelectedPreset(null);
+            handlePresetDeleted(deletedPresetId);
+        }
+    };
+
+    useEffect(() => {
+        // ✅ If modelId is NaN or undefined, reset it to the default model's ID
+        if (!modelId || isNaN(modelId)) {
+            console.warn("⚠️ Model ID is invalid. Resetting to default.");
+            setModelId(parseInt(models[0]?.id?.toString() || "1"));
+            setModelName(models[0]?.name || "GPT-4o");
+        }
+
+        console.log("📌 Default Model Loaded:", { modelId, modelName });
+    }, []);
   
     useEffect(() => {
         console.log('Temperature:', temperature);
@@ -69,13 +148,38 @@ export default function AIPlaygroundPage() {
                     </div>
                                           
                     <div className='ml-auto flex w-full space-x-2 sm:justify-end'>
-                        <PresetSelector presets={presets} />
-                        <PresetSave />
+                        <PresetSelector presets={presets} onPresetSelect={(preset) => {
+                            console.log("📌 Preset selected:", preset);
+                            setSelectedPreset(preset);
+                        }} />
+                        <PresetSave 
+                         modelId={modelId}
+                         prompt={systemPrompt} 
+                         temperature={temperature} 
+                         maxTokens={maxLength} 
+                         topP={topP} 
+                         frequencyPenalty={0} 
+                         presencePenalty={0}
+                         onPresetAdded={handlePresetAdded} 
+                        />
                         <div className='space-x-2 md:flex'>
-                            <CodeViewer />
+                        {/* current properties for LLM */}
+                        <CodeViewer 
+                            model={modelName} 
+                            prompt={systemPrompt} 
+                            temperature={temperature} 
+                            maxTokens={maxLength} 
+                            topP={topP} 
+                            frequencyPenalty={0} 
+                            presencePenalty={0} 
+                        />
+
                             <PresetShare />
                         </div>
-                        <PresetActions />
+                        <PresetActions 
+                            selectedPreset={selectedPreset} 
+                            onDeletePreset={handleDeletePreset} 
+                        />
                     </div>
                 </div>
                 <Separator />
@@ -240,11 +344,12 @@ export default function AIPlaygroundPage() {
                                     </TabsList>
                                 </div>
                                 <ModelSelector
-                                    types={types}
-                                    models={models}
+                                    // models={models}
                                     onModelSelect={(model) => {
-                                        setModelName(model.name); 
-                                        console.log("Model selected in AIPlaygroundPage:", model.name);  
+                                      
+                                        setModelName(model.name);
+                                        setModelId(model.id); 
+                                        console.log("Model selected in AIPlaygroundPage:", model.name, model.id);  
                                     }}
                                 />
                                 <TemperatureSelector defaultValue={[temperature]} onValueChange={setTemperature} />

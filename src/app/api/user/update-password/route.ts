@@ -4,8 +4,9 @@ import bcrypt from "bcrypt";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/app/api/authoptions/authOptions';
 
+import { prisma } from '@/app/lib/prisma';
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 export async function PATCH(req: Request) {
   try {

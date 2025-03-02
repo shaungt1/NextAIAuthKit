@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/authoptions/authOptions';
 
-const prisma = new PrismaClient();
+import { prisma } from '@/app/lib/prisma';
 
 /**
  * PATCH: Updates the user's profile image.

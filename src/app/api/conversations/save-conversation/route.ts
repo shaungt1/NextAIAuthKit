@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '../../../lib/prisma'; // Ensure Prisma is correctly set up
+import { prisma } from '@/app/lib/prisma';
 
 /**
  * Handles saving or updating conversation data.

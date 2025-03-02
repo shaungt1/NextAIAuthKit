@@ -32,36 +32,65 @@ export function LoginForm() {
     }, [email, password]);
     
 
+    // async function handleSubmit(event: React.SyntheticEvent) {
+    //     event.preventDefault();
+    //     setIsLoading(true);
+    //     setErrorMessage('');
+
+    //     try {
+    //         console.log('Logging in with:', { email, password });
+
+    //         const result = await signIn('credentials', {
+    //             email,
+    //             password,
+    //             redirect: true, // Redirect to the profile page on success
+    //             callbackUrl: '/profile',
+    //         });
+
+    //         if (!result?.ok) {
+    //             throw new Error('Login failed. Check your credentials.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Login error:', error);
+    //         if (error instanceof Error) {
+    //             setErrorMessage(error.message || 'An unexpected error occurred.');
+    //         } else {
+    //             setErrorMessage('An unexpected error occurred.');
+    //         }
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // }
+
     async function handleSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
         setIsLoading(true);
         setErrorMessage('');
-
+    
         try {
             console.log('Logging in with:', { email, password });
-
+    
             const result = await signIn('credentials', {
                 email,
                 password,
-                redirect: true, // Redirect to the profile page on success
-                callbackUrl: '/profile',
+                redirect: false, // Prevent auto-redirect, so we can handle it manually
             });
-
-            if (!result?.ok) {
-                throw new Error('Login failed. Check your credentials.');
+    
+            if (result?.error) {
+                throw new Error(result.error || 'Invalid email or password.');
+            }
+    
+            if (result?.ok) {
+                window.location.href = '/profile'; // Redirect to profile on success
             }
         } catch (error) {
             console.error('Login error:', error);
-            if (error instanceof Error) {
-                setErrorMessage(error.message || 'An unexpected error occurred.');
-            } else {
-                setErrorMessage('An unexpected error occurred.');
-            }
+            setErrorMessage(error instanceof Error ? error.message : 'An unexpected error occurred.');
         } finally {
             setIsLoading(false);
         }
     }
-
+    
     async function handleGoogleSignIn() {
         try {
             setIsLoading(true);

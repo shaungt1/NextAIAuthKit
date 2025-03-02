@@ -1,4 +1,19 @@
 import { Button } from '@/registry/new-york/ui/button';
+import Link from "next/link";
+
+export default function MutedLink() {
+  return (
+    <Link
+      href="https://python.langchain.com/api_reference/openai/chat_models/langchain_openai.chat_models.base.ChatOpenAI.html#langchain_openai.chat_models.base.ChatOpenAI"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-500 hover:text-gray-700 transition-colors"
+    >
+      LangChain OpenAI Chat Models API
+    </Link>
+  );
+}
+
 import {
     Dialog,
     DialogContent,
@@ -8,7 +23,25 @@ import {
     DialogTrigger
 } from '@/registry/new-york/ui/dialog';
 
-export function CodeViewer() {
+interface CodeViewerProps {
+    model: string;
+    prompt: string;
+    temperature: number;
+    maxTokens: number;
+    topP: number;
+    frequencyPenalty: number;
+    presencePenalty: number;
+}
+
+export function CodeViewer({
+    model,
+    prompt,
+    temperature,
+    maxTokens,
+    topP,
+    frequencyPenalty,
+    presencePenalty
+}: CodeViewerProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -18,8 +51,13 @@ export function CodeViewer() {
                 <DialogHeader>
                     <DialogTitle>View code</DialogTitle>
                     <DialogDescription>
-                        You can use the following code to start integrating your current prompt and settings into your
-                        application.
+                        This Project uses LangChain, You can use the following code to start integrating your project. Install the following package.
+                        {' '}
+                        <div className='my-3'></div>
+                        
+                        <code>Install: </code>
+                        <code className='text-sky-300'><i>pip install -U langchain-openai</i></code>
+                    
                     </DialogDescription>
                 </DialogHeader>
                 <div className='grid gap-4'>
@@ -27,10 +65,7 @@ export function CodeViewer() {
                         <pre>
                             <code className='grid gap-1 text-sm text-muted-foreground [&_span]:h-4'>
                                 <span>
-                                    <span className='text-sky-300'>import</span> os
-                                </span>
-                                <span>
-                                    <span className='text-sky-300'>import</span> openai
+                                <span className='text-violet-500'>from</span><span className='text-sky-300'> langchain_openai <span className='text-violet-500'>import </span></span><span className='text-red-500'>ChatOpenAI</span> 
                                 </span>
                                 <span />
                                 <span>
@@ -38,35 +73,34 @@ export function CodeViewer() {
                                     <span className='text-green-300'>&quot;OPENAI_API_KEY&quot;</span>)
                                 </span>
                                 <span />
-                                <span>response = openai.Completion.create(</span>
+                                <span>llm = ChatOpenAI(</span>
                                 <span>
                                     {' '}
-                                    model=
-                                    <span className='text-green-300'>&quot;davinci&quot;</span>,
+                                    model=<span className='text-green-300'>&quot;{model}&quot;</span>,
                                 </span>
                                 <span>
                                     {' '}
-                                    prompt=<span className='text-amber-300'>&quot;&quot;</span>,
+                                    prompt=<span className='text-amber-300'>&quot;{prompt}&quot;</span>,
                                 </span>
                                 <span>
                                     {' '}
-                                    temperature=<span className='text-amber-300'>0.9</span>,
+                                    temperature=<span className='text-amber-300'>{temperature}</span>,
                                 </span>
                                 <span>
                                     {' '}
-                                    max_tokens=<span className='text-amber-300'>5</span>,
+                                    max_tokens=<span className='text-amber-300'>{maxTokens}</span>,
                                 </span>
                                 <span>
                                     {' '}
-                                    top_p=<span className='text-amber-300'>1</span>,
+                                    top_p=<span className='text-amber-300'>{topP}</span>,
                                 </span>
                                 <span>
                                     {' '}
-                                    frequency_penalty=<span className='text-amber-300'>0</span>,
+                                    frequency_penalty=<span className='text-amber-300'>{frequencyPenalty}</span>,
                                 </span>
                                 <span>
                                     {' '}
-                                    presence_penalty=<span className='text-green-300'>0</span>,
+                                    presence_penalty=<span className='text-green-300'>{presencePenalty}</span>,
                                 </span>
                                 <span>)</span>
                             </code>
@@ -74,9 +108,19 @@ export function CodeViewer() {
                     </div>
                     <div>
                         <p className='text-sm text-muted-foreground'>
-                            Your API Key can be found here. You should use environment variables or a secret management
-                            tool to expose your key to your applications.
+                         You should use environment variables or a secret management tool to expose your key to your applications.
                         </p>
+                        <div className='my-3'></div>
+                        <DialogDescription> 
+                        <Link
+                            href="https://python.langchain.com/api_reference/openai/chat_models/langchain_openai.chat_models.base.ChatOpenAI.html#langchain_openai.chat_models.base.ChatOpenAI"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 hover:text-gray-300 transition-colors"
+                            >
+                           Source: LangChain OpenAI Chat Models API
+                            </Link>
+                    </DialogDescription>
                     </div>
                 </div>
             </DialogContent>

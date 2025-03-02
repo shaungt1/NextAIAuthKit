@@ -38,12 +38,35 @@
  *    - These models are used for transforming text into numerical representations for various AI tasks.
  *    - Each model has properties like id, name, description, and cost.
  */
+export const categories = [
+    "Large Language Model",
+    "Audio Model",
+    "Fine-Tuning Model",
+    "Assistants API",
+    "Transcription Speech Model",
+    "Image Generation Model",
+    "Embeddings Model"
+] as const;
 
-export const types = ['GPT-4', 'GPT-3.5', 'Other LLMs', 'Speech-to-Text', 'Text-to-Speech'] as const;
+export const types = [
+    'GPT-4',
+    'GPT-3.5',
+    'Other LLMs',
+    'Speech-to-Text',
+    'Text-to-Speech'
+] as const;
 
 export type ModelType = (typeof types)[number];
+export type AIProvidersType = (typeof types)[number];
+
+export interface AIProviders<Type = string> {
+    category: string;
+    provider?: string;
+    modelType?: string;
+}
 
 export interface Model<Type = string> {
+    aiProvider: AIProviders;
     id: string;
     name: string;
     description: string;
@@ -54,6 +77,8 @@ export interface Model<Type = string> {
     outputCost?: number | null; // Cost per 1M output tokens
     totalCost?: number | null;  // General cost field, defaults to null for all models
 }
+
+
 
 export const models: Model<ModelType>[] = [
     // 🟢 Latest GPT-4 LLM Models
@@ -66,7 +91,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 2.50,
         cachedInputCost: 1.25,
         outputCost: 10.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-4o-audio-preview-2024-12-17',
@@ -77,7 +109,12 @@ export const models: Model<ModelType>[] = [
         inputCost: 2.50,
         cachedInputCost: null,
         outputCost: 10.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     },
     {
         id: 'gpt-4o-realtime-preview-2024-12-17',
@@ -88,7 +125,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 5.00,
         cachedInputCost: 2.50,
         outputCost: 20.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-4o-mini-2024-07-18',
@@ -99,7 +143,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 0.15,
         cachedInputCost: 0.075,
         outputCost: 0.60,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-4o-mini-audio-preview-2024-12-17',
@@ -110,7 +161,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 0.15,
         cachedInputCost: null,
         outputCost: 0.60,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-4o-mini-realtime-preview-2024-12-17',
@@ -121,7 +179,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 0.60,
         cachedInputCost: 0.30,
         outputCost: 2.40,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'o1-2024-12-17',
@@ -132,7 +197,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 15.00,
         cachedInputCost: 7.50,
         outputCost: 60.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'o3-mini-2025-01-31',
@@ -143,7 +215,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 1.10,
         cachedInputCost: 0.55,
         outputCost: 4.40,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'o1-mini-2024-09-12',
@@ -154,7 +233,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 1.10,
         cachedInputCost: 0.55,
         outputCost: 4.40,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
 
     // 🟢 Other Leading LLM Models
@@ -167,7 +253,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 5.00,
         cachedInputCost: null,
         outputCost: 15.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-4-turbo-2024-04-09',
@@ -178,7 +271,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 10.00,
         cachedInputCost: null,
         outputCost: 30.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-4-0613',
@@ -189,7 +289,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 30.00,
         cachedInputCost: null,
         outputCost: 60.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-4-32k',
@@ -200,7 +307,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 60.00,
         cachedInputCost: null,
         outputCost: 120.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-3.5-turbo-0125',
@@ -211,7 +325,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 0.50,
         cachedInputCost: null,
         outputCost: 1.50,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-3.5-turbo-instruct',
@@ -222,7 +343,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 1.50,
         cachedInputCost: null,
         outputCost: 2.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'gpt-3.5-turbo-16k-0613',
@@ -233,7 +361,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 3.00,
         cachedInputCost: null,
         outputCost: 4.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'davinci-002',
@@ -244,7 +379,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 2.00,
         cachedInputCost: null,
         outputCost: 2.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     },
     {
         id: 'babbage-002',
@@ -255,7 +397,14 @@ export const models: Model<ModelType>[] = [
         inputCost: 0.40,
         cachedInputCost: null,
         outputCost: 0.40,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
+
     }
 ];
 
@@ -264,6 +413,7 @@ export const audioTypes = ['Speech-to-Text', 'Text-to-Speech'] as const;
 export type AudioModelType = (typeof audioTypes)[number];
 
 export interface AudioModel<Type = string> {
+    aiProvider: AIProviders;
     id: string;
     name: string;
     description: string;
@@ -283,7 +433,13 @@ export const audioModels: AudioModel<AudioModelType>[] = [
         inputCost: 40.00,
         cachedInputCost: null,
         outputCost: 80.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
     },
     {
         id: 'gpt-4o-mini-audio-preview-2024-12-17',
@@ -293,7 +449,13 @@ export const audioModels: AudioModel<AudioModelType>[] = [
         inputCost: 10.00,
         cachedInputCost: null,
         outputCost: 20.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
     },
     {
         id: 'gpt-4o-realtime-preview-2024-12-17',
@@ -303,7 +465,13 @@ export const audioModels: AudioModel<AudioModelType>[] = [
         inputCost: 40.00,
         cachedInputCost: 2.50,
         outputCost: 80.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
     },
     {
         id: 'gpt-4o-mini-realtime-preview-2024-12-17',
@@ -313,11 +481,18 @@ export const audioModels: AudioModel<AudioModelType>[] = [
         inputCost: 10.00,
         cachedInputCost: 0.30,
         outputCost: 20.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
     }
 ];
 
 export interface FineTuningModel {
+    aiProvider: AIProviders;
     id: string;
     name: string;
     description: string;
@@ -337,7 +512,13 @@ export const fineTuningModels: FineTuningModel[] = [
         inputCost: 3.75,
         cachedInputCost: 1.875,
         outputCost: 15.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
     },
     {
         id: 'gpt-4o-mini-2024-07-18',
@@ -347,7 +528,13 @@ export const fineTuningModels: FineTuningModel[] = [
         inputCost: 0.30,
         cachedInputCost: 0.15,
         outputCost: 1.20,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
     },
     {
         id: 'gpt-3.5-turbo',
@@ -357,7 +544,13 @@ export const fineTuningModels: FineTuningModel[] = [
         inputCost: 3.00,
         cachedInputCost: null,
         outputCost: 6.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
     },
     {
         id: 'davinci-002',
@@ -367,7 +560,13 @@ export const fineTuningModels: FineTuningModel[] = [
         inputCost: 12.00,
         cachedInputCost: null,
         outputCost: 12.00,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
     },
     {
         id: 'babbage-002',
@@ -377,12 +576,19 @@ export const fineTuningModels: FineTuningModel[] = [
         inputCost: 1.60,
         cachedInputCost: null,
         outputCost: 1.60,
-        totalCost: null
+        totalCost: null,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
+
     }
 ];
 
 
 export interface AssistantsAPI {
+    aiProvider: AIProviders;
     id: string;
     name: string;
     description: string;
@@ -394,18 +600,29 @@ export const assistantsAPI: AssistantsAPI[] = [
         id: 'code-interpreter',
         name: 'Code Interpreter',
         description: 'Runs and executes code in real-time, useful for AI-powered programming assistance.',
-        cost: 0.03
+        cost: 0.03,
+        aiProvider: {
+            category: 'Assistants',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     },
     {
         id: 'file-search',
         name: 'File Search',
         description: 'AI-assisted file search system with cost per GB of data processed.',
-        cost: 0.10
+        cost: 0.10,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     }
 ];
 
 
 export interface TranscriptionSpeechModel {
+    aiProvider: AIProviders;
     id: string;
     name: string;
     description: string;
@@ -419,26 +636,42 @@ export const transcriptionSpeechModels: TranscriptionSpeechModel[] = [
         name: 'Whisper',
         description: 'Automatic speech recognition (ASR) model for transcription.',
         useCase: 'Transcription',
-        cost: 0.006
+        cost: 0.006,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     },
     {
         id: 'tts',
         name: 'TTS',
         description: 'Text-to-Speech model that converts text into natural speech.',
         useCase: 'Speech Generation',
-        cost: 15.00
+        cost: 15.00,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     },
     {
         id: 'tts-hd',
         name: 'TTS HD',
         description: 'High-definition text-to-speech generation with superior quality.',
         useCase: 'Speech Generation',
-        cost: 30.00
+        cost: 30.00,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     }
 ];
 
 
 export interface ImageGenerationModel {
+    aiProvider: AIProviders;
     id: string;
     name: string;
     description: string;
@@ -452,40 +685,66 @@ export const imageGenerationModels: ImageGenerationModel[] = [
         name: 'DALL·E 3 (Standard)',
         description: 'AI image generation model producing high-quality creative visuals.',
         quality: '1024x1024',
-        cost: 0.04
+        cost: 0.04,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     },
     {
         id: 'dalle-3-hd',
         name: 'DALL·E 3 (HD)',
         description: 'High-definition AI-generated images with greater detail and resolution.',
         quality: '1024x1792',
-        cost: 0.08
+        cost: 0.08,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     },
     {
         id: 'dalle-2-256',
         name: 'DALL·E 2 (256x256)',
         description: 'Lower resolution AI-generated images with cost-effective pricing.',
         quality: '256x256',
-        cost: 0.016
+        cost: 0.016,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     },
     {
         id: 'dalle-2-512',
         name: 'DALL·E 2 (512x512)',
         description: 'Medium resolution AI-generated images with a balance of cost and quality.',
         quality: '512x512',
-        cost: 0.018
+        cost: 0.018,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     },
     {
         id: 'dalle-2-1024',
         name: 'DALL·E 2 (1024x1024)',
         description: 'High-quality AI-generated images for creative and commercial applications.',
         quality: '1024x1024',
-        cost: 0.02
+        cost: 0.02,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     }
 ];
 
 
 export interface EmbeddingsModel {
+    aiProvider: AIProviders;
     id: string;
     name: string;
     description: string;
@@ -497,18 +756,34 @@ export const embeddingsModels: EmbeddingsModel[] = [
         id: 'text-embedding-3-small',
         name: 'Text Embedding 3 Small',
         description: 'Optimized for lightweight embedding tasks with minimal compute requirements.',
-        cost: 0.02
+        cost: 0.02,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        },
+        
     },
     {
         id: 'text-embedding-3-large',
         name: 'Text Embedding 3 Large',
         description: 'High-performance embeddings for deep AI models.',
-        cost: 0.13
+        cost: 0.13,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     },
     {
         id: 'text-embedding-ada-002',
         name: 'Text Embedding Ada-002',
         description: 'Well-balanced embeddings model for most AI applications.',
-        cost: 0.10
+        cost: 0.10,
+        aiProvider: {
+            category: 'Chat',
+            provider: 'OpenAI',
+            modelType: 'LLM'
+        }
     }
 ];

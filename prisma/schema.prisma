@@ -13,15 +13,11 @@ model User {
   name          String?
   password      String?
   profileImage  Bytes?
-  imageOffsetX  Float? // X-offset for the image position
-  imageOffsetY  Float? // Y-offset for the image position
-  imageZoom     Float? // Zoom level for the image
   role          String?        @default("USER")
   location      String?
   latitude      Float?
   longitude     Float?
   ipAddress     String?
-  geodata       String?
   phone         String?
   bio           String?
   title         String?
@@ -33,13 +29,17 @@ model User {
   website       String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  imageOffsetX  Float?
+  imageOffsetY  Float?
+  imageZoom     Float?
+  geodata       String?
   image         String?
   accounts      Account[]
+  conversations Conversation[]
   ownedGroups   Group[]
   groups        GroupUser[]
   sessions      Session[]
   userImages    UserImages[]
-  conversations Conversation[]
 }
 
 model UserImages {
@@ -103,37 +103,49 @@ model Conversation {
   id                 String   @id @default(cuid())
   conversationId     String   @unique @default(uuid())
   userId             String
-  user               User     @relation(fields: [userId], references: [id])
-  // Store JSON as a string since SQLite doesn't support 'Json' type
   conversationSchema String?
   conversationData   String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+  user               User     @relation(fields: [userId], references: [id])
 }
-model LLM {
-  id              String   @id @default(uuid())
-  name            String   @unique
-  description     String
-  provider        String
-  version        String
-  type            String
-  temperature     Float
-  maxTokens       Int
-  topP            Float
-  frequencyPenalty Float
-  presencePenalty Float
-  models          Model[]
+
+
+model AIProvider {
+  id        Int      @id @default(autoincrement()) // ✅ Auto-incrementing ID
+  category  String   @unique // e.g., "Chat", "Embedding", "Vision", "Speech"
+  provider  String   // e.g., "OpenAI", "Anthropic", "Meta", "DeepSeek"
+  modelType String   // e.g., "LLM", "GEN", "AI", "ML"
+  models    Model[]
 }
 
 model Model {
-  id              String   @id @default(uuid())
+  id              Int      @id @default(autoincrement()) 
   name            String   @unique
-  description     String
+  description     String?
   type            String
   inputCost       Float?
   cachedInputCost Float?
   outputCost      Float?
   totalCost       Float?
-  llmId           String?
-  llm             LLM?     @relation(fields: [llmId], references: [id], onDelete: Cascade)
+  providerId      Int      // ✅ Changed from llmId to providerId
+  provider        AIProvider @relation(fields: [providerId], references: [id], onDelete: Cascade) // ✅ Corrected reference
+  presets         Preset[]
+}
+
+
+model Preset {
+  id               Int      @id @default(autoincrement()) // ✅ Auto-incrementing ID
+  name             String   @unique
+  description      String?
+  modelId          Int      // ✅ Now references an integer ID
+  prompt           String?
+  temperature      Float
+  maxTokens        Int
+  topP             Float
+  frequencyPenalty Float
+  presencePenalty  Float
+  createdAt        DateTime @default(now())
+  model            Model    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  @@map("preset")
 }
