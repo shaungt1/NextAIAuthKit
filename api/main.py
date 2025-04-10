@@ -1,18 +1,58 @@
-import os
-import asyncio 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import Optional
+# main.py
+
+"""
+Main entry point for the FastAPI application.
+Sets up the app with basic configurations and automatically registers routes from api/v1/.
+No endpoints are defined here; all routes are handled by route_loader.py.
+Uses hardcoded CORS middleware as per original design.
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from api.config.settings import (
+    APP_NAME, APP_VERSION, APP_DESCRIPTION, HOST, PORT, RELOAD, WORKERS, DEBUG,
+    ENABLE_API_DOCS, DOCS_URL, REDOC_URL, OPENAPI_URL, CONTACT, OPENAPI_SERVER_NAME
+)
+from api.config.logging import logger
+from api.config.route_loader import register_v1_routes
 
-from .genai_streaming_controller import LLMBot
+# Define lifespan event handler
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info(f"Starting {APP_NAME} v{APP_VERSION} on {HOST}:{PORT} with reload={RELOAD}, workers={WORKERS}")
+    yield
+    logger.info(f"Shutting down {APP_NAME}")
 
-# MAIN FASTAPI APP MAIN.PY
 
-app = FastAPI()
+# Initialize the FastAPI app with settings
+app = FastAPI(
+    title=APP_NAME,
+    version=APP_VERSION,
+    description=APP_DESCRIPTION,
+    debug=DEBUG,
+    docs_url=DOCS_URL if ENABLE_API_DOCS else None,
+    redoc_url=REDOC_URL if ENABLE_API_DOCS else None,
+    openapi_url=OPENAPI_URL if ENABLE_API_DOCS else None,
+    contact=CONTACT,
+    lifespan=lifespan,
+    servers=[{"url": f"http://{HOST}:{PORT}", "description": OPENAPI_SERVER_NAME}]
+)
 
-# Allow frontend to communicate with FastAPI
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    await websocket.send_text("Fast API WebSocket connection established!")
+    await websocket.close()
+
+# List all WebSocket routes
+# websocket_routes = [route for route in app.router.routes if isinstance(route, WebSocketRoute)]
+
+# for ws_route in websocket_routes:
+#     print(f"WebSocket route: {ws_route.path}")
+
+
+# Hardcoded CORS middleware (as in your original)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allow requests from any origin (for development)
@@ -20,48 +60,11 @@ app.add_middleware(
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all headers
 )
-class ChatRequest(BaseModel):
-    """
-    ChatRequest defines the schema for incoming JSON data. The user can optionally provide a
-    system_prompt (plain text or file path) and must provide a user_input (plain text or file path).
-    """
-    """
-    ChatRequest schema for incoming JSON data.
-    """
-    model_name: Optional[str] = None
-    system_prompt: Optional[str] = None
-    user_input: str
-    temperature: Optional[float] = 0.7
-    top_p: Optional[float] = 0.9
-    max_length: Optional[int] = 256
-    frequency_penalty: Optional[float] = 0.0
-    conversation_id: Optional[str] = None
 
-@app.post("/chat")
-async def chat_endpoint(request: ChatRequest):
-    """
-    Each POST to /chat creates a new LLMBot instance with the provided system_prompt (if any).
-    Then it sends the user_input to the bot, awaits the AI response, and returns the response
-    as plain text in JSON. 
-    """
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise HTTPException(status_code=500, detail="OPENAI_API_KEY not set in environment.")
+# Apply route registration only (no other configs for now)
+register_v1_routes(app)  # Automatically registers all routes from api/v1/, including llm_ws_route.py
 
-    # Create the bot with the system prompt (if present).
-    bot = LLMBot(
-          model_name=request.model_name or "gpt-4o", 
-        api_key=api_key,
-        system_prompt=request.system_prompt,
-        temperature=request.temperature,
-        top_p=request.top_p,
-        max_length=request.max_length,
-        conversation_id=request.conversation_id
-    )
-
-    
-    async def stream_response():
-        async for chunk in bot.send_message(request.user_input):
-            yield chunk.content  # Stream chunks directly as they arrive
-
-    return StreamingResponse(stream_response(), media_type="text/plain")
+if __name__ == "__main__":
+    import uvicorn
+    logger.info(f"Booting server with config: host={HOST}, port={PORT}, reload={RELOAD}, workers={WORKERS}")
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=RELOAD, workers=WORKERS)

@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_community.document_loaders import TextLoader
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+# from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-# GENERITIVE AI CONTROLLER
+# GENERITIVE AI CONTROLLER DOES NOT STREAM
 # Set the path to the root of the repository relative to this script's location
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 

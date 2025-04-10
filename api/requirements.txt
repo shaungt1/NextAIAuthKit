@@ -1,6 +1,7 @@
 aiohttp
 aioredis
 asyncio
+black
 Celery
 celery[redis]
 celery[sqlalchemy]

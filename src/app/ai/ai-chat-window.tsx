@@ -40,6 +40,7 @@ export default function AIChatWindow({
     const [loading, setLoading] = useState(false);
     const [isChatActive, setIsChatActive] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const socket = useRef<WebSocket | null>(null);
 
     // 🔹 Define inactivity timeout (1 min 15 sec) from environment variable
     const INACTIVITY_TIMEOUT = Number(process.env.NEXT_PUBLIC_INACTIVITY_TIMEOUT) || 75000;
@@ -80,8 +81,72 @@ export default function AIChatWindow({
 
         return () => {
             if (inactivityTimer) clearTimeout(inactivityTimer);
+            if (socket.current) socket.current.close();
         };
     }, [session]);
+
+    useEffect(() => {
+        const connectWebSocket = () => {
+            socket.current = new WebSocket('ws://localhost:8000/v1/ws/chat');
+
+            socket.current.onopen = () => {
+                console.log("✅ WebSocket connection established.");
+            };
+
+            let aiResponse = ''; // Accumulate AI response here
+
+            socket.current.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    console.log("📩 Received WebSocket message:", data);
+
+                    if (data.role === 'ai') {
+                        // Accumulate the AI response
+                        aiResponse += data.content;
+
+                        // Update the last AI message in the chat
+                        setMessages((prev) => {
+                            const lastMessage = prev[prev.length - 1];
+                            if (lastMessage && lastMessage.role === 'ai') {
+                                // Update the last AI message
+                                return [
+                                    ...prev.slice(0, -1),
+                                    { ...lastMessage, content: aiResponse },
+                                ];
+                            } else {
+                                // Add a new AI message if none exists
+                                return [
+                                    ...prev,
+                                    { role: 'ai', content: aiResponse, timestamp: new Date().toLocaleTimeString() },
+                                ];
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error("⚠️ Error parsing WebSocket message:", error);
+                }
+            };
+
+            socket.current.onclose = (event) => {
+                console.log("❌ WebSocket connection closed:", event.reason || "No reason provided.");
+                // Attempt to reconnect after a delay
+                setTimeout(() => {
+                    console.log("🔄 Attempting to reconnect WebSocket...");
+                    connectWebSocket();
+                }, 3000);
+            };
+
+            socket.current.onerror = (error) => {
+                console.error("⚠️ WebSocket error:", error);
+            };
+        };
+
+        connectWebSocket();
+
+        return () => {
+            if (socket.current) socket.current.close();
+        };
+    }, []);
 
     // 🔹 Reset inactivity timer on user action
     const resetInactivityTimer = () => {
@@ -89,42 +154,38 @@ export default function AIChatWindow({
         inactivityTimer = setTimeout(endChat, INACTIVITY_TIMEOUT);
     };
 
-
-
     const startNewConversation = () => {
         console.log("🆕 Starting a new conversation...");
-    
+
         // Generate a fresh conversation ID
         const newConversationId = uuidv4();
         setConversationId(newConversationId);
         sessionStorage.setItem("conversationId", newConversationId);
-    
+
         // Clear chat window and reset state
         setMessages([]);
         setIsChatActive(false);
     };
-    
-
 
     // 🔹 Save conversation and clear session storage when chat ends
     const endChat = async () => {
         if (!conversationId || !session?.user?.id) return;
-    
+
         console.log("⏳ Ending chat and saving...");
-    
+
         // 🔹 Make sure we capture the latest messages before clearing state
         const latestMessages = [...messages];
-    
+
         // Structure conversation data with full history
         const conversationData = JSON.stringify(latestMessages);
         const payload = {
             conversationId,
             userId: session.user.id,
-            conversationData
+            conversationData,
         };
-    
+
         console.log("📜 SAVING CONVERSATION DATA:", payload);
-    
+
         try {
             // ✅ Ensure conversation is fully saved before clearing state
             const response = await fetch('/api/conversations/save-conversation', {
@@ -132,11 +193,11 @@ export default function AIChatWindow({
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
-    
+
             if (!response.ok) throw new Error("⚠️ Failed to save conversation");
-    
+
             console.log("✅ Conversation saved successfully");
-    
+
             // 🔹 Clear sessionStorage only after save confirmation
             sessionStorage.removeItem("conversationId");
             setConversationId(''); // Clear conversation ID
@@ -148,71 +209,150 @@ export default function AIChatWindow({
         }
     };
 
-  
-    
 
 
-
-    //Send message to AI model
-    const sendMessage = async () => {
+    const sendMessage = () => {
         if (!input.trim()) return;
-
+    
+        if (!socket.current || socket.current.readyState !== WebSocket.OPEN) {
+            console.error("⚠️ WebSocket is not open. Cannot send message.");
+            return;
+        }
+    
         const timestamp = new Date().toLocaleTimeString();
         const userMessage: Message = { role: 'user', content: input, timestamp };
-
+    
         // Append user message to chat
         setMessages((prev) => [...prev, userMessage]);
         setInput('');
         setLoading(true);
         setIsChatActive(true);
-
+    
         resetInactivityTimer(); // Restart inactivity timer
-
+    
+        const payload = {
+            modelName,
+            user_input: input,
+            system_prompt: systemPrompt,
+            temperature,
+            max_tokens: maxLength,
+            top_p: topP,
+            frequency_penalty: frequencyPenalty,
+            conversation_id: conversationId,
+        };
+    
+        console.log("📤 Sending WebSocket message:", payload);
+    
         try {
-            const response = await fetch('http://localhost:8000/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    modelName,
-                    user_input: input,
-                    system_prompt: systemPrompt,
-                    temperature,
-                    max_tokens: maxLength,
-                    top_p: topP,
-                    frequency_penalty: frequencyPenalty,
-                    conversation_id: conversationId,
-                }),
-            });
-
-            if (!response.body) throw new Error("⚠️ No response body received.");
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let aiResponse = '';
-
-            setMessages((prev) => [...prev, { role: 'ai', content: '', timestamp }]);
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                aiResponse += decoder.decode(value, { stream: true });
-
-                setMessages((prev) =>
-                    prev.map((msg, index) =>
-                        index === prev.length - 1 && msg.role === 'ai' ? { ...msg, content: aiResponse } : msg
-                    )
-                );
-            }
-
-            console.log("📜 FULL CONVERSATION HISTORY:", [...messages, { role: 'user', content: input, timestamp }, { role: 'ai', content: aiResponse, timestamp }]);
-
+            socket.current.send(JSON.stringify(payload));
         } catch (error) {
-            console.error("⚠️ Chat API Streaming Error:", error);
-        } finally {
-            setLoading(false);
+            console.error("⚠️ Error sending WebSocket message:", error);
         }
     };
+    
+    useEffect(() => {
+        const connectWebSocket = () => {
+            socket.current = new WebSocket('ws://localhost:8000/v1/ws/chat');
+    
+            socket.current.onopen = () => {
+                console.log("✅ WebSocket connection established.");
+            };
+    
+            let aiResponse = ''; // Accumulate AI response here
+    
+            socket.current.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    console.log("📩 Received WebSocket message:", data);
+    
+                    if (data.role === 'ai') {
+                        // Accumulate the AI response
+                        aiResponse += data.content;
+    
+                        // Update the last AI message in the chat
+                        setMessages((prev) => {
+                            const lastMessage = prev[prev.length - 1];
+                            if (lastMessage && lastMessage.role === 'ai') {
+                                // Update the last AI message
+                                return [
+                                    ...prev.slice(0, -1),
+                                    { ...lastMessage, content: aiResponse },
+                                ];
+                            } else {
+                                // Add a new AI message if none exists
+                                return [
+                                    ...prev,
+                                    { role: 'ai', content: aiResponse, timestamp: new Date().toLocaleTimeString() },
+                                ];
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error("⚠️ Error parsing WebSocket message:", error);
+                }
+            };
+    
+            socket.current.onclose = (event) => {
+                console.log("❌ WebSocket connection closed:", event.reason || "No reason provided.");
+                // Attempt to reconnect after a delay
+                setTimeout(() => {
+                    console.log("🔄 Attempting to reconnect WebSocket...");
+                    connectWebSocket();
+                }, 3000);
+            };
+    
+            socket.current.onerror = (error) => {
+                console.error("⚠️ WebSocket error:", error);
+            };
+        };
+    
+        connectWebSocket();
+    
+        return () => {
+            if (socket.current) socket.current.close();
+        };
+    }, []);
+
+
+    // // Send message to AI model via WebSocket
+    // const sendMessage = () => {
+    //     if (!input.trim()) return;
+
+    //     if (!socket.current || socket.current.readyState !== WebSocket.OPEN) {
+    //         console.error("⚠️ WebSocket is not open. Cannot send message.");
+    //         return;
+    //     }
+
+    //     const timestamp = new Date().toLocaleTimeString();
+    //     const userMessage: Message = { role: 'user', content: input, timestamp };
+
+    //     // Append user message to chat
+    //     setMessages((prev) => [...prev, userMessage]);
+    //     setInput('');
+    //     setLoading(true);
+    //     setIsChatActive(true);
+
+    //     resetInactivityTimer(); // Restart inactivity timer
+
+    //     const payload = {
+    //         modelName,
+    //         user_input: input,
+    //         system_prompt: systemPrompt,
+    //         temperature,
+    //         max_tokens: maxLength,
+    //         top_p: topP,
+    //         frequency_penalty: frequencyPenalty,
+    //         conversation_id: conversationId,
+    //     };
+
+    //     console.log("📤 Sending WebSocket message:", payload);
+
+    //     try {
+    //         socket.current.send(JSON.stringify(payload));
+    //     } catch (error) {
+    //         console.error("⚠️ Error sending WebSocket message:", error);
+    //     }
+    // };
 
     return (
         <Card className='flex flex-col h-full w-full max-h-screen'>
@@ -223,9 +363,19 @@ export default function AIChatWindow({
 
             <CardContent className='flex-grow overflow-y-auto p-4 space-y-4'>
                 {messages.map((msg, index) => (
-                    <div key={index} className={`flex flex-col w-fit max-w-[85%] ${msg.role === 'user' ? 'ml-auto text-right' : 'text-left'}`}>
-                        <span className='text-xs font-semibold text-zinc-400'>{msg.role === 'user' ? 'You' : 'AI Assistant'}</span>
-                        <div className={`p-2 rounded-lg shadow-md ${msg.role === 'user' ? 'bg-secondary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+                    <div
+                        key={index}
+                        className={`flex ${
+                            msg.role === 'user' ? 'justify-end' : 'justify-start'
+                        }`}
+                    >
+                        <div
+                            className={`p-2 rounded-lg shadow-md max-w-[75%] ${
+                                msg.role === 'user'
+                                    ? 'bg-secondary text-primary-foreground'
+                                    : 'bg-muted text-muted-foreground'
+                            }`}
+                        >
                             {msg.content}
                         </div>
                     </div>

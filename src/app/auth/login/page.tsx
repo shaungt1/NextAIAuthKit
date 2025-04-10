@@ -3,6 +3,8 @@
  * - Entry point for user login.
  * - Uses NextAuth for authentication with Google SSO and credentials.
  * - Styled with ShadCN UI and Tailwind.
+ * - Uses LoginForm component for login form functionality.
+ * - Includes link to sign-up page for new users.
  */
 
 import { Metadata } from "next";

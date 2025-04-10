@@ -14,22 +14,23 @@ export function LoginForm() {
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = React.useState('');
 
-    
-    React.useEffect(() => {
-        async function checkSession() {
-            const result = await signIn('credentials', {
-                email,
-                password,
-                redirect: false,
-            });
+    // THIS HAS A SIDE EFFECT “immediate sign-in” side effect"
+    // TODO: fix this to where it poplates the imputs or uses popup to to allow user to quick login
+    // React.useEffect(() => {
+    //     async function checkSession() {
+    //         const result = await signIn('credentials', {
+    //             email,
+    //             password,
+    //             redirect: false,
+    //         });
             
-            if (result?.ok) {
-                const userSession = await fetch('/api/auth/session').then(res => res.json());
-                console.log("✅ User Session:", userSession);
-            }
-        }
-        checkSession();
-    }, [email, password]);
+    //         if (result?.ok) {
+    //             const userSession = await fetch('/api/auth/session').then(res => res.json());
+    //             console.log("✅ User Session:", userSession);
+    //         }
+    //     }
+    //     checkSession();
+    // }, [email, password]);
     
 
     // async function handleSubmit(event: React.SyntheticEvent) {

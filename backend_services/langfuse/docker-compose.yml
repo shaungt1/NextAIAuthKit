@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  langfuse:
+    image: ghcr.io/langfuse/langfuse:latest
+    container_name: langfuse
+    restart: unless-stopped
+    ports:
+      - "${PORT:-1886}:3000" # Expose internal port 3000 externally as user-defined PORT (default 1886)
+    env_file:
+      - .env.langfuse
+    networks:
+      - langfuse
+
+  langfuse-worker:
+    image: ghcr.io/langfuse/langfuse-worker:latest
+    container_name: langfuse-worker
+    restart: unless-stopped
+    profiles: ["worker"]  # Only run if specified
+    env_file:
+      - .env.langfuse
+    depends_on:
+      - langfuse
+    networks:
+      - langfuse
+
+networks:
+  langfuse:
