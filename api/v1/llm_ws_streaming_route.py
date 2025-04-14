@@ -48,6 +48,8 @@ max_length: Optional[int] = 256
 frequency_penalty: Optional[float] = 0.0
 conversation_id: Optional[str] = None
 """
+
+
 @router.websocket("/ws/chat")
 async def websocket_chat_endpoint(websocket: WebSocket):
     """
@@ -68,7 +70,9 @@ async def websocket_chat_endpoint(websocket: WebSocket):
 
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
-        await websocket.close(code=1011, reason="OPENAI_API_KEY not set in environment.")
+        await websocket.close(
+            code=1011, reason="OPENAI_API_KEY not set in environment."
+        )
         return
 
     bot = None
@@ -99,61 +103,63 @@ async def websocket_chat_endpoint(websocket: WebSocket):
                     conversation_id=conversation_id,
                 )
 
+            # Send the user message back to the frontend with the role "user"
+            await websocket.send_json({"role": "user", "content": user_input})
+
             # Stream the AI response back to the client
             async for chunk in bot.send_message(user_input):
-                await websocket.send_json({"role": "ai", "content": chunk.content})
+                await websocket.send_json(chunk)
 
     except WebSocketDisconnect:
-        logger.info("WebSocket connection closed.")  # Updated from print
+        logger.info("WebSocket connection closed.")
     except Exception as e:
-        logger.error(f"WebSocket error: {str(e)}")  # Updated logging
+        logger.error(f"WebSocket error: {str(e)}")
         await websocket.close(code=1011, reason=str(e))
-
-
 
 
 # ─────────────────────────────────────────────────────────────
 # 📦 Model: WebSocket Chat Payload (Text-NLP focused)
 # ─────────────────────────────────────────────────────────────
 
+
 class WebSocketChatRequest(BaseModel):
     model_name: Optional[str] = Field(
         default="gpt-4o",
-        description="Name of the LLM backend (e.g. 'gpt-4o', 'claude-3', 'mistral', 'gemini-pro', etc.)"
+        description="Name of the LLM backend (e.g. 'gpt-4o', 'claude-3', 'mistral', 'gemini-pro', etc.)",
     )
     system_prompt: Optional[str] = Field(
         default=None,
-        description="Optional system-level instruction to guide model behavior (e.g. 'You are a helpful assistant.')"
+        description="Optional system-level instruction to guide model behavior (e.g. 'You are a helpful assistant.')",
     )
     user_input: str = Field(
-        ...,
-        description="The main user message sent to the LLM (required)."
+        ..., description="The main user message sent to the LLM (required)."
     )
     temperature: Optional[float] = Field(
         default=0.7,
-        description="Sampling temperature for generation randomness (0.0 = deterministic, 1.0 = diverse)."
+        description="Sampling temperature for generation randomness (0.0 = deterministic, 1.0 = diverse).",
     )
     top_p: Optional[float] = Field(
         default=0.9,
-        description="Top-p (nucleus) sampling value to control output diversity."
+        description="Top-p (nucleus) sampling value to control output diversity.",
     )
     max_length: Optional[int] = Field(
         default=256,
-        description="Maximum number of tokens to generate in a single response."
+        description="Maximum number of tokens to generate in a single response.",
     )
     frequency_penalty: Optional[float] = Field(
         default=0.0,
-        description="Penalize repeated tokens to reduce redundancy (OpenAI-style)."
+        description="Penalize repeated tokens to reduce redundancy (OpenAI-style).",
     )
     conversation_id: Optional[str] = Field(
         default=None,
-        description="Optional conversation ID to support multi-turn context or memory (external tracking)."
+        description="Optional conversation ID to support multi-turn context or memory (external tracking).",
     )
 
 
 # ─────────────────────────────────────────────────────────────
 # ⚠️ Error Model for Failed Responses
 # ─────────────────────────────────────────────────────────────
+
 
 class ErrorDetail(BaseModel):
     detail: str
@@ -165,6 +171,7 @@ class ErrorDetail(BaseModel):
 #    - Explains WS-only use
 #    - Prevents accidental misuse
 # ─────────────────────────────────────────────────────────────
+
 
 @router.post(
     "/ws/chat-info",
@@ -264,12 +271,26 @@ This endpoint models **OpenAI-style chat completions**, used across LLM provider
     response_model=WebSocketChatRequest,
     status_code=status.HTTP_200_OK,
     responses={
-        200: {"description": "Schema returned successfully (DO NOT USE FOR LIVE CHAT)."},
-        400: {"model": ErrorDetail, "description": "Client Error – Invalid example structure."},
-        422: {"model": ErrorDetail, "description": "Validation Error – Payload mismatch."},
-        500: {"model": ErrorDetail, "description": "Internal Server Error – Unexpected backend issue."},
-        503: {"model": ErrorDetail, "description": "Service Unavailable – LLM backend not responding."}
-    }
+        200: {
+            "description": "Schema returned successfully (DO NOT USE FOR LIVE CHAT)."
+        },
+        400: {
+            "model": ErrorDetail,
+            "description": "Client Error – Invalid example structure.",
+        },
+        422: {
+            "model": ErrorDetail,
+            "description": "Validation Error – Payload mismatch.",
+        },
+        500: {
+            "model": ErrorDetail,
+            "description": "Internal Server Error – Unexpected backend issue.",
+        },
+        503: {
+            "model": ErrorDetail,
+            "description": "Service Unavailable – LLM backend not responding.",
+        },
+    },
 )
 async def websocket_chat_schema(example: WebSocketChatRequest):
     """
@@ -277,8 +298,3 @@ async def websocket_chat_schema(example: WebSocketChatRequest):
     This is NOT the actual WebSocket handler.
     """
     return example
-
-
-
-
-
