@@ -1,0 +1,32 @@
+FROM python:3.11-alpine
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies for Alpine
+RUN apk add --no-cache \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    libpq-dev \
+    build-base \
+    postgresql-dev \
+    python3-dev \
+    py3-pip \
+    openssl-dev \
+    rust \
+    cargo
+
+WORKDIR /code
+
+COPY requirements.txt /code/requirements.txt
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY . .
+
+EXPOSE 8000 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,184 @@
+#1 [backend internal] load build definition from Dockerfile.fastapi
+#1 transferring dockerfile: 690B done
+#1 DONE 0.0s
+
+#2 [backend internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [backend internal] load metadata for docker.io/library/python:3.11-alpine
+#3 DONE 0.6s
+
+#4 [backend 1/7] FROM docker.io/library/python:3.11-alpine@sha256:32ac7ba3dad4bcee9c8cfaf3b489f832b84ba0a1eb8ef76685456d424baaf444
+#4 DONE 0.0s
+
+#5 [backend internal] load build context
+#5 transferring context: 5.16kB 0.0s done
+#5 DONE 0.0s
+
+#6 [backend 2/7] RUN apk add --no-cache     gcc     musl-dev     libffi-dev     libpq-dev     build-base     postgresql-dev     python3-dev     py3-pip     openssl-dev
+#6 CACHED
+
+#7 [backend 3/7] WORKDIR /code
+#7 CACHED
+
+#8 [backend 4/7] COPY requirements.txt /code/requirements.txt
+#8 CACHED
+
+#9 [backend 5/7] RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+#9 CACHED
+
+#10 [backend 6/7] RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+#10 2.298 Collecting aiohttp (from -r /code/requirements.txt (line 1))
+#10 2.398   Downloading aiohttp-3.11.16-cp311-cp311-musllinux_1_2_x86_64.whl.metadata (7.7 kB)
+#10 2.481 Collecting aioredis (from -r /code/requirements.txt (line 2))
+#10 2.504   Downloading aioredis-2.0.1-py3-none-any.whl.metadata (15 kB)
+#10 2.575 Collecting black (from -r /code/requirements.txt (line 3))
+#10 2.608   Downloading black-25.1.0-py3-none-any.whl.metadata (81 kB)
+#10 2.701 Collecting crewai (from -r /code/requirements.txt (line 4))
+#10 2.719   Downloading crewai-0.114.0-py3-none-any.whl.metadata (33 kB)
+#10 2.776 Collecting crewai-tools (from -r /code/requirements.txt (line 5))
+#10 2.796   Downloading crewai_tools-0.40.1-py3-none-any.whl.metadata (5.5 kB)
+#10 2.885 Collecting Celery (from -r /code/requirements.txt (line 6))
+#10 2.927   Downloading celery-5.5.1-py3-none-any.whl.metadata (22 kB)
+#10 2.985 Collecting coloredlogs (from -r /code/requirements.txt (line 8))
+#10 3.009   Downloading coloredlogs-15.0.1-py2.py3-none-any.whl.metadata (12 kB)
+#10 3.042 Collecting jira (from -r /code/requirements.txt (line 11))
+#10 3.061   Downloading jira-3.8.0-py3-none-any.whl.metadata (9.1 kB)
+#10 3.229 Collecting langchain (from -r /code/requirements.txt (line 12))
+#10 3.267   Downloading langchain-0.3.23-py3-none-any.whl.metadata (7.8 kB)
+#10 3.308 Collecting langchain-experimental (from -r /code/requirements.txt (line 13))
+#10 3.338   Downloading langchain_experimental-0.3.4-py3-none-any.whl.metadata (1.7 kB)
+#10 3.417 Collecting langchain-openai (from -r /code/requirements.txt (line 14))
+#10 3.437   Downloading langchain_openai-0.3.13-py3-none-any.whl.metadata (2.3 kB)
+#10 3.474 Collecting langchain_community (from -r /code/requirements.txt (line 15))
+#10 3.494   Downloading langchain_community-0.3.21-py3-none-any.whl.metadata (2.4 kB)
+#10 3.554 Collecting langchain_core (from -r /code/requirements.txt (line 16))
+#10 3.577   Downloading langchain_core-0.3.52-py3-none-any.whl.metadata (5.9 kB)
+#10 3.648 Collecting langgraph (from -r /code/requirements.txt (line 17))
+#10 3.667   Downloading langgraph-0.3.30-py3-none-any.whl.metadata (7.7 kB)
+#10 3.724 Collecting logfire (from -r /code/requirements.txt (line 19))
+#10 3.749   Downloading logfire-3.14.0-py3-none-any.whl.metadata (9.2 kB)
+#10 3.825 Collecting openai (from -r /code/requirements.txt (line 20))
+#10 3.850   Downloading openai-1.74.0-py3-none-any.whl.metadata (25 kB)
+#10 3.994 Collecting pandas (from -r /code/requirements.txt (line 21))
+#10 4.024   Downloading pandas-2.2.3-cp311-cp311-musllinux_1_2_x86_64.whl.metadata (89 kB)
+#10 4.112 Collecting prisma (from -r /code/requirements.txt (line 22))
+#10 4.162   Downloading prisma-0.15.0-py3-none-any.whl.metadata (17 kB)
+#10 4.268 Collecting psycopg2 (from -r /code/requirements.txt (line 23))
+#10 4.291   Downloading psycopg2-2.9.10.tar.gz (385 kB)
+#10 4.408   Preparing metadata (setup.py): started
+#10 5.198   Preparing metadata (setup.py): finished with status 'done'
+#10 5.346 Collecting pydantic (from -r /code/requirements.txt (line 24))
+#10 5.381   Downloading pydantic-2.11.3-py3-none-any.whl.metadata (65 kB)
+#10 5.443 Collecting pytest (from -r /code/requirements.txt (line 25))
+#10 5.477   Downloading pytest-8.3.5-py3-none-any.whl.metadata (7.6 kB)
+#10 5.525 Collecting pytest-asyncio (from -r /code/requirements.txt (line 26))
+#10 5.559   Downloading pytest_asyncio-0.26.0-py3-none-any.whl.metadata (4.0 kB)
+#10 5.594 Collecting python-dateutil (from -r /code/requirements.txt (line 27))
+#10 5.615   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+#10 5.705 Collecting python-dotenv (from -r /code/requirements.txt (line 28))
+#10 5.762   Downloading python_dotenv-1.1.0-py3-none-any.whl.metadata (24 kB)
+#10 5.820 Collecting pyyaml (from -r /code/requirements.txt (line 29))
+#10 5.842   Downloading PyYAML-6.0.2-cp311-cp311-musllinux_1_1_x86_64.whl.metadata (2.1 kB)
+#10 5.889 Collecting redis (from -r /code/requirements.txt (line 30))
+#10 5.914   Downloading redis-5.2.1-py3-none-any.whl.metadata (9.1 kB)
+#10 5.963 Collecting requests (from -r /code/requirements.txt (line 31))
+#10 6.007   Downloading requests-2.32.3-py3-none-any.whl.metadata (4.6 kB)
+#10 6.052 Collecting rq (from -r /code/requirements.txt (line 32))
+#10 6.072   Downloading rq-2.3.2-py3-none-any.whl.metadata (6.9 kB)
+#10 6.117 Collecting starlette (from -r /code/requirements.txt (line 33))
+#10 6.148   Downloading starlette-0.46.2-py3-none-any.whl.metadata (6.2 kB)
+#10 6.453 Collecting sqlalchemy (from -r /code/requirements.txt (line 34))
+#10 6.479   Downloading sqlalchemy-2.0.40-cp311-cp311-musllinux_1_2_x86_64.whl.metadata (9.6 kB)
+#10 6.519 Collecting sse-starlette (from -r /code/requirements.txt (line 35))
+#10 6.540   Downloading sse_starlette-2.2.1-py3-none-any.whl.metadata (7.8 kB)
+#10 6.607 Collecting tqdm (from -r /code/requirements.txt (line 36))
+#10 6.634   Downloading tqdm-4.67.1-py3-none-any.whl.metadata (57 kB)
+#10 6.691 Collecting uvicorn (from -r /code/requirements.txt (line 37))
+#10 6.709   Downloading uvicorn-0.34.1-py3-none-any.whl.metadata (6.5 kB)
+#10 6.751 Collecting databases[postgresql] (from -r /code/requirements.txt (line 9))
+#10 6.775   Downloading databases-0.9.0-py3-none-any.whl.metadata (5.4 kB)
+#10 6.847 Collecting fastapi[standard] (from -r /code/requirements.txt (line 10))
+#10 6.866   Downloading fastapi-0.115.12-py3-none-any.whl.metadata (27 kB)
+#10 6.912 Collecting langserve[all] (from -r /code/requirements.txt (line 18))
+#10 6.946   Downloading langserve-0.3.1-py3-none-any.whl.metadata (40 kB)
+#10 6.998 Collecting aiohappyeyeballs>=2.3.0 (from aiohttp->-r /code/requirements.txt (line 1))
+#10 7.034   Downloading aiohappyeyeballs-2.6.1-py3-none-any.whl.metadata (5.9 kB)
+#10 7.057 Collecting aiosignal>=1.1.2 (from aiohttp->-r /code/requirements.txt (line 1))
+#10 7.075   Downloading aiosignal-1.3.2-py2.py3-none-any.whl.metadata (3.8 kB)
+#10 7.103 Collecting attrs>=17.3.0 (from aiohttp->-r /code/requirements.txt (line 1))
+#10 7.121   Downloading attrs-25.3.0-py3-none-any.whl.metadata (10 kB)
+#10 7.291 Collecting frozenlist>=1.1.1 (from aiohttp->-r /code/requirements.txt (line 1))
+#10 7.315   Downloading frozenlist-1.5.0-cp311-cp311-musllinux_1_2_x86_64.whl.metadata (13 kB)
+#10 7.553 Collecting multidict<7.0,>=4.5 (from aiohttp->-r /code/requirements.txt (line 1))
+#10 7.571   Downloading multidict-6.4.3-cp311-cp311-musllinux_1_2_x86_64.whl.metadata (5.3 kB)
+#10 7.626 Collecting propcache>=0.2.0 (from aiohttp->-r /code/requirements.txt (line 1))
+#10 7.645   Downloading propcache-0.3.1-cp311-cp311-musllinux_1_2_x86_64.whl.metadata (10 kB)
+#10 7.909 Collecting yarl<2.0,>=1.17.0 (from aiohttp->-r /code/requirements.txt (line 1))
+#10 7.928   Downloading yarl-1.19.0-cp311-cp311-musllinux_1_2_x86_64.whl.metadata (71 kB)
+#10 7.962 Collecting async-timeout (from aioredis->-r /code/requirements.txt (line 2))
+#10 7.980   Downloading async_timeout-5.0.1-py3-none-any.whl.metadata (5.1 kB)
+#10 8.011 Collecting typing-extensions (from aioredis->-r /code/requirements.txt (line 2))
+#10 8.028   Downloading typing_extensions-4.13.2-py3-none-any.whl.metadata (3.0 kB)
+#10 8.128 Collecting click>=8.0.0 (from black->-r /code/requirements.txt (line 3))
+#10 8.145   Downloading click-8.1.8-py3-none-any.whl.metadata (2.3 kB)
+#10 8.167 Collecting mypy-extensions>=0.4.3 (from black->-r /code/requirements.txt (line 3))
+#10 8.183   Downloading mypy_extensions-1.0.0-py3-none-any.whl.metadata (1.1 kB)
+#10 8.244 Collecting packaging>=22.0 (from black->-r /code/requirements.txt (line 3))
+#10 8.266   Downloading packaging-24.2-py3-none-any.whl.metadata (3.2 kB)
+#10 8.291 Collecting pathspec>=0.9.0 (from black->-r /code/requirements.txt (line 3))
+#10 8.310   Downloading pathspec-0.12.1-py3-none-any.whl.metadata (21 kB)
+#10 8.345 Collecting platformdirs>=2 (from black->-r /code/requirements.txt (line 3))
+#10 8.363   Downloading platformdirs-4.3.7-py3-none-any.whl.metadata (11 kB)
+#10 8.398 Collecting appdirs>=1.4.4 (from crewai->-r /code/requirements.txt (line 4))
+#10 8.417   Downloading appdirs-1.4.4-py2.py3-none-any.whl.metadata (9.0 kB)
+#10 8.451 Collecting auth0-python>=4.7.1 (from crewai->-r /code/requirements.txt (line 4))
+#10 8.474   Downloading auth0_python-4.9.0-py3-none-any.whl.metadata (9.0 kB)
+#10 8.508 Collecting blinker>=1.9.0 (from crewai->-r /code/requirements.txt (line 4))
+#10 8.526   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+#10 8.566 Collecting chromadb>=0.5.23 (from crewai->-r /code/requirements.txt (line 4))
+#10 8.597   Downloading chromadb-1.0.4.tar.gz (1.1 MB)
+#10 8.637      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 27.6 MB/s eta 0:00:00
+#10 8.889   Installing build dependencies: started
+#10 12.94   Installing build dependencies: finished with status 'done'
+#10 12.95   Getting requirements to build wheel: started
+#10 13.23   Getting requirements to build wheel: finished with status 'done'
+#10 13.23   Preparing metadata (pyproject.toml): started
+#10 13.52   Preparing metadata (pyproject.toml): finished with status 'error'
+#10 13.52   error: subprocess-exited-with-error
+#10 13.52   
+#10 13.52   × Preparing metadata (pyproject.toml) did not run successfully.
+#10 13.52   │ exit code: 1
+#10 13.52   ╰─> [6 lines of output]
+#10 13.52       Checking for Rust toolchain....
+#10 13.52       
+#10 13.52       Cargo, the Rust package manager, is not installed or is not on PATH.
+#10 13.52       This package requires Rust and Cargo to compile extensions. Install it through
+#10 13.52       the system's package manager or via https://rustup.rs/
+#10 13.52       
+#10 13.52       [end of output]
+#10 13.52   
+#10 13.52   note: This error originates from a subprocess, and is likely not a problem with pip.
+#10 13.66 error: metadata-generation-failed
+#10 13.66 
+#10 13.66 × Encountered error while generating package metadata.
+#10 13.66 ╰─> See above for output.
+#10 13.66 
+#10 13.66 note: This is an issue with the package mentioned above, not pip.
+#10 13.66 hint: See above for details.
+#10 ERROR: process "/bin/sh -c pip install --no-cache-dir --upgrade -r /code/requirements.txt" did not complete successfully: exit code: 1
+------
+ > [backend 6/7] RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt:
+#10 13.52       [end of output]
+#10 13.52   
+#10 13.52   note: This error originates from a subprocess, and is likely not a problem with pip.
+#10 13.66 error: metadata-generation-failed
+#10 13.66 
+#10 13.66 × Encountered error while generating package metadata.
+#10 13.66 ╰─> See above for output.
+#10 13.66 
+#10 13.66 note: This is an issue with the package mentioned above, not pip.
+#10 13.66 hint: See above for details.
+------
+failed to solve: process "/bin/sh -c pip install --no-cache-dir --upgrade -r /code/requirements.txt" did not complete successfully: exit code: 1
