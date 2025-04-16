@@ -1,17 +1,15 @@
 "use client";
 
+import React from "react"; // Import React
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { MoreHorizontal, SquarePen, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Message } from "ai/react";
-import Image from "next/image";
-import { Suspense, useEffect, useState } from "react";
-import SidebarSkeleton from "./sidebar-skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import UserSettings from "./user-settings";
-import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
-import PullModel from "./pull-model";
+import Image from "next/image"; // Keep if used by UserSettings or other parts
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"; // Keep if used by UserSettings
+import UserSettings from "./user-settings"; // Assuming this exists and is used
 import {
   Dialog,
   DialogContent,
@@ -19,22 +17,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "./ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { TrashIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
-import useChatStore from "@/app/hooks/useChatStore";
+import useChatStore from "@/app/hooks/useChatStore"; // Ensure path is correct
 
 interface SidebarProps {
   isCollapsed: boolean;
-  messages: Message[];
+  messages: Message[]; // Keep prop, might be used indirectly or by child components
   onClick?: () => void;
   isMobile: boolean;
-  chatId: string;
+  chatId: string; // ID of the currently active chat
   closeSidebar?: () => void;
 }
 
@@ -46,9 +44,41 @@ export function Sidebar({
   closeSidebar,
 }: SidebarProps) {
   const router = useRouter();
-
   const chats = useChatStore((state) => state.chats);
-  const handleDelete = useChatStore((state) => state.handleDelete);
+  const deleteChatById = useChatStore((state) => state.deleteChat);
+
+  const handleNewChatClick = () => {
+    console.log("Navigating to /localchat for new chat...");
+    router.push("/localchat");
+    if (closeSidebar) {
+      closeSidebar();
+    }
+  };
+
+  const handleDeleteChat = (idToDelete: string) => {
+    console.log(`Attempting to delete chat: ${idToDelete}`);
+    if (deleteChatById) {
+      deleteChatById(idToDelete);
+      console.log(`Deleted chat ${idToDelete} from store.`);
+    } else {
+      console.error("deleteChat function not found in useChatStore");
+      return;
+    }
+
+    if (idToDelete === chatId) {
+      console.log(`Deleted active chat ${idToDelete}, navigating to /localchat...`);
+      router.push("/localchat");
+    }
+  };
+
+  const getChatName = (chatData: any): string => {
+    if (chatData?.messages?.length > 0) {
+      const firstUserMessage = chatData.messages.find((m: Message) => m.role === 'user');
+      const content = firstUserMessage?.content || chatData.messages[0]?.content || '';
+      return content.substring(0, 30) + (content.length > 30 ? '...' : '');
+    }
+    return 'New Chat';
+  };
 
   return (
     <div
@@ -56,100 +86,94 @@ export function Sidebar({
       className="relative justify-between group lg:bg-accent/20 lg:dark:bg-card/35 flex flex-col h-full gap-4 p-2 data-[collapsed=true]:p-2 "
     >
       <div className=" flex flex-col justify-between p-2 max-h-fit overflow-y-auto">
+        {/* --- New Chat Button --- */}
         <Button
-          onClick={() => {
-            router.push("/");
-            if (closeSidebar) {
-              closeSidebar();
-            }
-          }}
+          onClick={handleNewChatClick}
           variant="ghost"
-          className="flex justify-between w-full h-14 text-sm xl:text-lg font-normal items-center "
+          className="flex justify-start w-full h-14 text-sm xl:text-lg font-normal items-center gap-3"
         >
-          <div className="flex gap-3 items-center ">
-            {!isCollapsed && !isMobile && (
-              <Image
-                src="/ollama.png"
-                alt="AI"
-                width={28}
-                height={28}
-                className="dark:invert hidden 2xl:block"
-              />
-            )}
-            New chat
-          </div>
           <SquarePen size={18} className="shrink-0 w-4 h-4" />
+          {(!isCollapsed || isMobile) && <span>New chat</span>}
         </Button>
 
+        {/* --- Chat List --- */}
         <div className="flex flex-col pt-10 gap-2">
-          <p className="pl-4 text-xs text-muted-foreground">Your chats</p>
-          <Suspense fallback>
-            {chats &&
-              Object.entries(chats)
-                .sort(
-                  ([, a], [, b]) =>
-                    new Date(b.createdAt).getTime() -
-                    new Date(a.createdAt).getTime()
-                )
-                .map(([id, chat]) => (
-                  <Link
-                    key={id}
-                    href={`/c/${id}`}
-                    className={cn(
-                      {
-                        [buttonVariants({ variant: "secondaryLink" })]:
-                          id === chatId,
-                        [buttonVariants({ variant: "ghost" })]: id !== chatId,
-                      },
-                      "flex justify-between w-full h-14 text-base font-normal items-center "
-                    )}
-                  >
-                    <div className="flex gap-3 items-center truncate">
-                      <div className="flex flex-col">
-                        <span className="text-xs font-normal ">
-                          {chat.messages.length > 0
-                            ? chat.messages[0].content
-                            : ""}
-                        </span>
-                      </div>
-                    </div>
+          {(!isCollapsed || isMobile) && <p className="pl-4 text-xs text-muted-foreground">Your chats</p>}
+          {chats && Object.keys(chats).length > 0 ? (
+            Object.entries(chats)
+              .sort(
+                ([, a], [, b]) =>
+                  (b.createdAt ? new Date(b.createdAt).getTime() : 0) -
+                  (a.createdAt ? new Date(a.createdAt).getTime() : 0)
+              )
+              .map(([id, chatData]) => (
+                <Link
+                  key={id}
+                  href={`/localchat/${id}`}
+                  onClick={() => {
+                    console.log(`Clicked link to chat: /localchat/${id}`);
+                    if (closeSidebar) closeSidebar();
+                  }}
+                  className={cn(
+                    buttonVariants({ variant: id === chatId ? "secondaryLink" : "ghost", size: "lg" }),
+                    "flex justify-between w-full h-14 text-sm font-normal items-center group/chatlink"
+                  )}
+                  title={getChatName(chatData)}
+                >
+                  {/* Chat Name (conditional) */}
+                  {(!isCollapsed || isMobile) && (
+                    <span className="flex-grow truncate pr-2">
+                      {getChatName(chatData)}
+                    </span>
+                  )}
+
+                  {/* --- Options Menu (Delete) --- */}
+                  {(!isCollapsed || isMobile) && id === chatId && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
+                        {/* This Button is the single child for DropdownMenuTrigger */}
                         <Button
                           variant="ghost"
-                          className="flex justify-end items-center"
-                          onClick={(e) => e.stopPropagation()}
+                          size="icon"
+                          className="h-8 w-8 shrink-0 opacity-0 group-hover/chatlink:opacity-100"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
                         >
-                          <MoreHorizontal size={15} className="shrink-0" />
+                          <MoreHorizontal size={15} />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className=" ">
+                      <DropdownMenuContent align="end" className="w-[180px]">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              className="w-full flex gap-2 hover:text-red-500 text-red-500 justify-start items-center"
-                              onClick={(e) => e.stopPropagation()}
+                            {/* This DropdownMenuItem is the single child for DialogTrigger */}
+                            <DropdownMenuItem
+                              className="text-red-500 focus:text-red-600 focus:bg-red-100 dark:focus:bg-red-900/50 cursor-pointer"
+                              onSelect={(e) => e.preventDefault()} // Prevent menu closing immediately
                             >
-                              <Trash2 className="shrink-0 w-4 h-4" />
+                              {/* Content inside the item */}
+                              <Trash2 className="mr-2 h-4 w-4" />
                               Delete chat
-                            </Button>
+                            </DropdownMenuItem>
                           </DialogTrigger>
+                          {/* --- Delete Confirmation Dialog --- */}
                           <DialogContent>
                             <DialogHeader className="space-y-4">
                               <DialogTitle>Delete chat?</DialogTitle>
                               <DialogDescription>
-                                Are you sure you want to delete this chat? This
-                                action cannot be undone.
+                                Are you sure? This cannot be undone.
                               </DialogDescription>
                               <div className="flex justify-end gap-2">
-                                <Button variant="outline">Cancel</Button>
+                                <DialogClose asChild>
+                                  {/* This Button is the single child for DialogClose */}
+                                  <Button variant="outline">Cancel</Button>
+                                </DialogClose>
                                 <Button
                                   variant="destructive"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleDelete(id);
-                                    router.push("/");
+                                    handleDeleteChat(id);
                                   }}
                                 >
                                   Delete
@@ -160,14 +184,18 @@ export function Sidebar({
                         </Dialog>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </Link>
-                ))}
-          </Suspense>
+                  )}
+                </Link>
+              ))
+          ) : (
+            (!isCollapsed || isMobile) && <p className="pl-4 text-xs text-muted-foreground">No chats yet.</p>
+          )}
         </div>
       </div>
 
-      <div className="justify-end px-2 py-2 w-full border-t">
-        <UserSettings />
+      {/* --- Bottom Section (User Settings) --- */}
+      <div className={cn("justify-end px-2 py-2 w-full border-t mt-auto")}>
+        <UserSettings isCollapsed={isCollapsed && !isMobile} />
       </div>
     </div>
   );

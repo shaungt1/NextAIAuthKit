@@ -118,87 +118,382 @@
     --input: 240 5.9% 90%;
     --ring: var(--selected-primary-hover);
     --radius: 0.325rem;
- /* === Gradient Primary Colors === */
- --primary-grad-deep-purple: linear-gradient(90deg, #6a11cb, #2575fc);
- --primary-grad-blood-orange: linear-gradient(to right, #FF512F, #DD2476);
- --primary-grad-hotpink-purple: linear-gradient(90deg, #FF1493, #8A2BE2);
- --primary-grad-green-blue: linear-gradient(90deg, #00FF7F, #00BFFF);
- --primary-grad-deep-blue: linear-gradient(to right, #00d2ff, #3a7bd5);
- --primary-grad-purple-pink: linear-gradient(to right, #DA22FF, #9733EE);
-  --primary-grad-blue-green: linear-gradient(to right, #00c6ff, #0072ff);
+
+
+ /* === Gradient Primary Linear Hex Colors === */
+ --primary-hex-deep-purple: linear-gradient(90deg, #6a11cb, #2575fc);
+ --primary-hex-blood-orange: linear-gradient(to right, #FF512F, #DD2476);
+ --primary-hex-hotpink-purple: linear-gradient(90deg, #FF1493, #8A2BE2);
+ --primary-hex-green-blue: linear-gradient(90deg, #00FF7F, #00BFFF);
+ --primary-hex-deep-blue: linear-gradient(to right, #00d2ff, #3a7bd5);
+ --primary-hex-purple-pink: linear-gradient(to right, #DA22FF, #9733EE);
+ --primary-hex-blue-green: linear-gradient(to right, #00c6ff, #0072ff);
   /* === Raw HSL Variables for All Solid Primary Colors === */
 
+
+/* PRIMARY SOLID TAILWIND THEME COLORS */
 /* === Blue === */
---primary-blue-50: 210 100% 97%;
---primary-blue-100: 210 95% 92%;
---primary-blue-200: 210 90% 82%;
---primary-blue-300: 210 85% 72%;
---primary-blue-400: 210 80% 62%;
---primary-blue-500: 210 75% 52%;
---primary-blue-600: 210 70% 42%;
---primary-blue-700: 210 65% 32%;
---primary-blue-800: 210 60% 22%;
---primary-blue-900: 210 55% 12%;
+--primary-blue-50: 213.8 100% 96.9%;
+--primary-blue-100: 214.3 94.6% 92.7%;
+--primary-blue-200: 213.3 96.9% 87.3%;
+--primary-blue-300: 211.7 96.4% 78.4%;
+--primary-blue-400: 213.1 93.9% 67.8%;
+--primary-blue-500: 217.2 91.2% 59.8%;
+--primary-blue-600: 221.2 83.2% 53.3%;
+--primary-blue-700: 225.9 70.7% 40.2%;
+--primary-blue-800: 224.4 64.3% 32.9%;
+--primary-blue-900: 226.2 57% 21%;
 
-/* === Violet === */
---primary-violet-50: 258.3 100% 97%;
---primary-violet-100: 258.3 95% 92%;
---primary-violet-200: 258.3 90% 82%;
---primary-violet-300: 258.3 85% 72%;
---primary-violet-400: 258.3 80% 62%;
---primary-violet-500: 258.3 75% 52%;
---primary-violet-600: 258.3 70% 42%;
---primary-violet-700: 258.3 65% 32%;
---primary-violet-800: 258.3 60% 22%;
---primary-violet-900: 258.3 55% 12%;
 
-/* === Fuchsia === */
---primary-fuchsia-50: 292.2 100% 97%;
---primary-fuchsia-100: 292.2 95% 92%;
---primary-fuchsia-200: 292.2 90% 82%;
---primary-fuchsia-300: 292.2 85% 72%;
---primary-fuchsia-400: 292.2 80% 62%;
---primary-fuchsia-500: 292.2 75% 52%;
---primary-fuchsia-600: 292.2 70% 42%;
---primary-fuchsia-700: 292.2 65% 32%;
---primary-fuchsia-800: 292.2 60% 22%;
---primary-fuchsia-900: 292.2 55% 12%;
+/* === Slate === */
+--primary-slate-50: 210 40% 98%;
+--primary-slate-100: 210 40% 96.1%;
+--primary-slate-200: 214.3 31.8% 91.4%;
+--primary-slate-300: 212.7 26.8% 83.9%;
+--primary-slate-400: 215 20.2% 65.1%;
+--primary-slate-500: 222.2 82% 53%;
+--primary-slate-600: 215.3 19.3% 34.5%;
+--primary-slate-700: 215.3 25% 26.7%;
+--primary-slate-800: 217.2 32.6% 17.5%;
+--primary-slate-900: 222.2 47.4% 11.2%;
+--primary-slate-950: 222.2 84% 4.9%;
 
-/* === Teal === */
---primary-teal-50: 180 100% 97%;
---primary-teal-100: 180 95% 92%;
---primary-teal-200: 180 90% 82%;
---primary-teal-300: 180 85% 72%;
---primary-teal-400: 180 80% 62%;
---primary-teal-500: 180 75% 52%;
---primary-teal-600: 180 70% 42%;
---primary-teal-700: 180 65% 32%;
---primary-teal-800: 180 60% 22%;
---primary-teal-900: 180 55% 12%;
+/* === Gray === */
+--primary-gray-50: 220 8.9% 97.6%;
+--primary-gray-100: 220 8.9% 94.9%;
+--primary-gray-200: 220 7.7% 89.6%;
+--primary-gray-300: 216.9 7.2% 82.9%;
+--primary-gray-400: 218.3 6.6% 63.9%;
+--primary-gray-500: 220 4.6% 45.1%;
+--primary-gray-600: 215 5.2% 32.9%;
+--primary-gray-700: 217.2 10.6% 24.7%;
+--primary-gray-800: 215 14.1% 16.1%;
+--primary-gray-900: 221.2 39.3% 11.2%;
+--primary-gray-950: 224 71.4% 4.1%;
+
+/* === Zinc === */
+--primary-zinc-50: 0 0% 100%;
+--primary-zinc-100: 240 4.8% 95.9%;
+--primary-zinc-200: 240 5.9% 90%;
+--primary-zinc-300: 240 4.9% 83.9%;
+--primary-zinc-400: 240 5% 64.9%;
+--primary-zinc-500: 240 3.8% 46.1%;
+--primary-zinc-600: 240 5.2% 33.9%;
+--primary-zinc-700: 240 5.3% 26.1%;
+--primary-zinc-800: 240 3.7% 15.9%;
+--primary-zinc-900: 240 5.9% 10%;
+--primary-zinc-950: 240 10% 3.9%;
+
+/* === Neutral === */
+--primary-neutral-50: 0 0% 100%;
+--primary-neutral-100: 0 0% 96.1%;
+--primary-neutral-200: 0 0% 89.8%;
+--primary-neutral-300: 0 0% 83.1%;
+--primary-neutral-400: 0 0% 63.9%;
+--primary-neutral-500: 0 0% 45.1%;
+--primary-neutral-600: 0 0% 32.2%;
+--primary-neutral-700: 0 0% 25.1%;
+--primary-neutral-800: 0 0% 14.9%;
+--primary-neutral-900: 0 0% 9%;
+--primary-neutral-950: 0 0% 3.9%;
+
+/* === Stone === */
+--primary-stone-50: 60 4.8% 95.9%;
+--primary-stone-100: 60 4.8% 89.8%;
+--primary-stone-200: 20 6% 82.9%;
+--primary-stone-300: 24 5.7% 75.9%;
+--primary-stone-400: 24 5.4% 63.9%;
+--primary-stone-500: 25 5.3% 44.7%;
+--primary-stone-600: 33.3 5.5% 32.4%;
+--primary-stone-700: 30 6.3% 25.1%;
+--primary-stone-800: 12 6.5% 15.1%;
+--primary-stone-900: 24 9.8% 10%;
+--primary-stone-950: 20 14.3% 4.1%;
+
+/* === Red === */
+--primary-red-50: 0 85.7% 97.3%;
+--primary-red-100: 0 93.3% 94.1%;
+--primary-red-200: 0 96.3% 89.4%;
+--primary-red-300: 0 93.5% 81.8%;
+--primary-red-400: 0 90.6% 70.2%;
+--primary-red-500: 0 84.2% 60.2%;
+--primary-red-600: 0 72.2% 50.6%;
+--primary-red-700: 0 73.6% 41.8%;
+--primary-red-800: 0 70.2% 35.5%;
+--primary-red-900: 0 62.8% 30.6%;
+
+/* === Orange === */
+--primary-orange-50: 24.6 100% 96.9%;
+--primary-orange-100: 24.6 100% 93.7%;
+--primary-orange-200: 24.6 94.5% 87.3%;
+--primary-orange-300: 24.6 89.7% 78.6%;
+--primary-orange-400: 24.6 88.8% 67.3%;
+--primary-orange-500: 24.6 88.3% 56.7%;
+--primary-orange-600: 24.6 80.1% 48.8%;
+--primary-orange-700: 24.6 74.2% 40.4%;
+--primary-orange-800: 24.6 71.4% 34.5%;
+--primary-orange-900: 24.6 63.5% 28.6%;
+
+/* === Amber === */
+--primary-amber-50: 48 100% 96.1%;
+--primary-amber-100: 48 96.5% 89.4%;
+--primary-amber-200: 48 96.7% 79.8%;
+--primary-amber-300: 45.9 96.7% 71.4%;
+--primary-amber-400: 43.3 96.4% 64.1%;
+--primary-amber-500: 37.8 92.5% 58.2%;
+--primary-amber-600: 32.1 87.7% 53.9%;
+--primary-amber-700: 26.2 80.3% 49.8%;
+--primary-amber-800: 22.7 72.9% 45.5%;
+--primary-amber-900: 21.1 64.5% 40.4%;
+
+/* === Yellow === */
+--primary-yellow-50: 54.4 100% 95.7%;
+--primary-yellow-100: 54.4 100% 90.8%;
+--primary-yellow-200: 52.6 98.3% 83.9%;
+--primary-yellow-300: 50.4 97.8% 74.5%;
+--primary-yellow-400: 47.9 96.4% 64.7%;
+--primary-yellow-500: 45.2 93.4% 57.5%;
+--primary-yellow-600: 41.4 88.9% 52.2%;
+--primary-yellow-700: 36.7 82.5% 47.3%;
+--primary-yellow-800: 32.7 74.8% 42.7%;
+--primary-yellow-900: 29.7 66.3% 37.8%;
+
+/* === Lime === */
+--primary-lime-50: 78.3 92.3% 95.3%;
+--primary-lime-100: 78.9 88.9% 89.8%;
+--primary-lime-200: 79.7 85.7% 81.6%;
+--primary-lime-300: 80.8 82.4% 71.4%;
+--primary-lime-400: 82.2 78.9% 60.2%;
+--primary-lime-500: 83.7 74.9% 50.4%;
+--primary-lime-600: 85.2 70.6% 42.2%;
+--primary-lime-700: 86.9 66.7% 35.3%;
+--primary-lime-800: 88.8 64.3% 29.6%;
+--primary-lime-900: 90.8 62.7% 24.7%;
+
+/* === Green === */
+--primary-green-50: 138.5 76.5% 96.9%;
+--primary-green-100: 140.6 84.1% 93.1%;
+--primary-green-200: 142.1 80.5% 86.9%;
+--primary-green-300: 143.8 77.2% 78.4%;
+--primary-green-400: 145.5 73.7% 68.8%;
+--primary-green-500: 147.4 69.9% 60.2%;
+--primary-green-600: 149.3 65.8% 52.4%;
+--primary-green-700: 151.4 61.7% 45.3%;
+--primary-green-800: 153.7 57.7% 38.8%;
+--primary-green-900: 156.2 53.7% 32.7%;
 
 /* === Emerald === */
---primary-emerald-50: 140 100% 97%;
---primary-emerald-100: 140 95% 92%;
---primary-emerald-200: 140 90% 82%;
---primary-emerald-300: 140 85% 72%;
---primary-emerald-400: 140 80% 62%;
---primary-emerald-500: 140 75% 52%;
---primary-emerald-600: 140 70% 42%;
---primary-emerald-700: 140 65% 32%;
---primary-emerald-800: 140 60% 22%;
---primary-emerald-900: 140 55% 12%;
+--primary-emerald-50: 151.8 81% 95.9%;
+--primary-emerald-100: 149.3 80.4% 90%;
+--primary-emerald-200: 152.9 76% 80.4%;
+--primary-emerald-300: 156.2 71.6% 67.5%;
+--primary-emerald-400: 158.1 64.4% 51.6%;
+--primary-emerald-500: 160.1 84.1% 39.4%;
+--primary-emerald-600: 161.4 93.5% 30.4%;
+--primary-emerald-700: 162.8 93.5% 24.3%;
+--primary-emerald-800: 163.3 94.5% 19.4%;
+--primary-emerald-900: 163.7 94.5% 14.1%;
+
+/* === Teal === */
+--primary-teal-50: 166.2 76.5% 96.7%;
+--primary-teal-100: 167.2 85.5% 89.2%;
+--primary-teal-200: 168.4 83.8% 78.2%;
+--primary-teal-300: 170.6 76.9% 68.2%;
+--primary-teal-400: 172.5 66% 50.4%;
+--primary-teal-500: 173.4 80.4% 40%;
+--primary-teal-600: 174.7 83.9% 31.4%;
+--primary-teal-700: 175.3 69.4% 24.7%;
+--primary-teal-800: 176.2 69.4% 19.4%;
+--primary-teal-900: 176.6 69.1% 14.7%;
+
+/* === Cyan === */
+--primary-cyan-50: 183.2 100% 96.3%;
+--primary-cyan-100: 185.2 95.9% 90.2%;
+--primary-cyan-200: 186.9 93.5% 81.8%;
+--primary-cyan-300: 188.7 91.3% 72.2%;
+--primary-cyan-400: 189.5 90.4% 62.2%;
+--primary-cyan-500: 190.2 97.1% 53.9%;
+--primary-cyan-600: 191.6 91.4% 46.5%;
+--primary-cyan-700: 192.9 82.3% 39.6%;
+--primary-cyan-800: 193.7 75.3% 32.5%;
+--primary-cyan-900: 194.4 69.6% 27%;
+
+/* === Sky === */
+--primary-sky-50: 198.4 100% 96.5%;
+--primary-sky-100: 198.4 93.5% 93.7%;
+--primary-sky-200: 199.4 95.5% 88.2%;
+--primary-sky-300: 200.4 97.4% 81.2%;
+--primary-sky-400: 201.3 96.3% 72.4%;
+--primary-sky-500: 199.4 92.4% 62.7%;
+--primary-sky-600: 199.9 92.5% 52.2%;
+--primary-sky-700: 200.6 94.4% 43.3%;
+--primary-sky-800: 201.1 89.7% 35.5%;
+--primary-sky-900: 201.3 86.5% 29.6%;
+
+/* === Indigo === */
+--primary-indigo-50: 225.9 100% 96.7%;
+--primary-indigo-100: 226.5 100% 93.9%;
+--primary-indigo-200: 228 96.5% 88.8%;
+--primary-indigo-300: 229.7 93.5% 81.8%;
+--primary-indigo-400: 234.5 89.5% 73.9%;
+--primary-indigo-500: 238.7 83.5% 66.7%;
+--primary-indigo-600: 243.4 75.4% 58.6%;
+--primary-indigo-700: 244.5 57.9% 43.9%;
+--primary-indigo-800: 243.7 54.5% 33.3%;
+--primary-indigo-900: 242.5 47.4% 26.1%;
+
+/* === Violet === */
+--primary-violet-50: 250 100% 97.6%;
+--primary-violet-100: 251.4 91.3% 95.5%;
+--primary-violet-200: 250.5 95.2% 91.8%;
+--primary-violet-300: 252.5 94.7% 85.9%;
+--primary-violet-400: 255.1 91.7% 76.3%;
+--primary-violet-500: 258.3 89.5% 66.3%;
+--primary-violet-600: 262.1 83.3% 57.8%;
+--primary-violet-700: 263.4 69.8% 50.4%;
+--primary-violet-800: 263.4 69.3% 42.2%;
+--primary-violet-900: 264.2 68.7% 34.7%;
+
+/* === Purple === */
+--primary-purple-50: 270 100% 98%;
+--primary-purple-100: 269 100% 95.9%;
+--primary-purple-200: 268.7 100% 91.8%;
+--primary-purple-300: 268.9 97.4% 83.1%;
+--primary-purple-400: 270 95.2% 75.3%;
+--primary-purple-500: 271.2 91.3% 65.3%;
+--primary-purple-600: 271.5 81.3% 55.9%;
+--primary-purple-700: 272.1 71.7% 47.1%;
+--primary-purple-800: 272.9 66.7% 39.2%;
+--primary-purple-900: 273.6 65.7% 32.2%;
+
+/* === Fuchsia === */
+--primary-fuchsia-50: 289.9 100% 97.8%;
+--primary-fuchsia-100: 287.9 100% 95.7%;
+--primary-fuchsia-200: 288.4 95.8% 90.6%;
+--primary-fuchsia-300: 291.1 93.1% 83.8%;
+--primary-fuchsia-400: 292.3 91.4% 72.5%;
+--primary-fuchsia-500: 292.2 84.1% 60.6%;
+--primary-fuchsia-600: 293.5 69.5% 48.8%;
+--primary-fuchsia-700: 294.8 74.4% 40.4%;
+--primary-fuchsia-800: 295.4 69.7% 33.7%;
+--primary-fuchsia-900: 296.5 63.6% 27.8%;
+
+/* === Pink === */
+--primary-pink-50: 327.1 73.3% 97.1%;
+--primary-pink-100: 326.7 77.3% 94.7%;
+--primary-pink-200: 326.5 84.5% 89.6%;
+--primary-pink-300: 327.3 87.7% 81.8%;
+--primary-pink-400: 328.3 85.5% 70.2%;
+--primary-pink-500: 330.4 81.2% 60.4%;
+--primary-pink-600: 333.8 71.4% 50.6%;
+--primary-pink-700: 335.8 77.6% 42.2%;
+--primary-pink-800: 336.3 68.8% 35.5%;
+--primary-pink-900: 336.4 65.9% 30.2%;
 
 /* === Rose === */
---primary-rose-50: 350 100% 97%;
---primary-rose-100: 350 95% 92%;
---primary-rose-200: 350 90% 82%;
---primary-rose-300: 350 85% 72%;
---primary-rose-400: 350 80% 62%;
---primary-rose-500: 350 75% 52%;
---primary-rose-600: 350 70% 42%;
---primary-rose-700: 350 65% 32%;
---primary-rose-800: 350 60% 22%;
---primary-rose-900: 350 55% 12%;
+--primary-rose-50: 355.7 100% 97.3%;
+--primary-rose-100: 355.6 100% 94.7%;
+--primary-rose-200: 352.7 96.1% 90.2%;
+--primary-rose-300: 352.6 95.7% 82%;
+--primary-rose-400: 351.3 94.5% 71.4%;
+--primary-rose-500: 349.7 89.2% 60.2%;
+--primary-rose-600: 346.8 77.2% 49.8%;
+--primary-rose-700: 345.3 82.7% 40.8%;
+--primary-rose-800: 343.4 79.6% 34.7%;
+--primary-rose-900: 341.5 75.5% 30.4%;
+
+/* === Primary and Secondary Color Variables === */
+--primary-gray: var(--primary-blue-600);
+--secondary-gray: var(--primary-blue-500);
+
+--primary-gray: var(--primary-slate-600);
+--secondary-gray: var(--primary-slate-500);
+
+--primary-gray: var(--primary-gray-600);
+--secondary-gray: var(--primary-gray-500);
+
+--primary-zinc: var(--primary-zinc-600);
+--secondary-zinc: var(--primary-zinc-500);
+
+--primary-neutral: var(--primary-neutral-600);
+--secondary-neutral: var(--primary-neutral-500);
+
+--primary-stone: var(--primary-stone-600);
+--secondary-stone: var(--primary-stone-500);
+
+--primary-red: var(--primary-red-600);
+--secondary-red: var(--primary-red-500);
+
+--primary-orange: var(--primary-orange-600);
+--secondary-orange: var(--primary-orange-500);
+
+--primary-amber: var(--primary-amber-600);
+--secondary-amber: var(--primary-amber-500);
+
+--primary-yellow: var(--primary-yellow-600);
+--secondary-yellow: var(--primary-yellow-500);
+
+--primary-lime: var(--primary-lime-600);
+--secondary-lime: var(--primary-lime-500);
+
+--primary-green: var(--primary-green-600);
+--secondary-green: var(--primary-green-500);
+
+--primary-emerald: var(--primary-emerald-600);
+--secondary-emerald: var(--primary-emerald-500);
+
+--primary-teal: var(--primary-teal-600);
+--secondary-teal: var(--primary-teal-500);
+
+--primary-cyan: var(--primary-cyan-600);
+--secondary-cyan: var(--primary-cyan-500);
+
+--primary-sky: var(--primary-sky-600);
+--secondary-sky: var(--primary-sky-500);
+
+--primary-indigo: var(--primary-indigo-600);
+--secondary-indigo: var(--primary-indigo-500);
+
+--primary-violet: var(--primary-violet-600);
+--secondary-violet: var(--primary-violet-500);
+
+--primary-purple: var(--primary-purple-600);
+--secondary-purple: var(--primary-purple-500);
+
+--primary-fuchsia: var(--primary-fuchsia-600);
+--secondary-fuchsia: var(--primary-fuchsia-500);
+
+--primary-pink: var(--primary-pink-600);
+--secondary-pink: var(--primary-pink-500);
+
+--primary-rose: var(--primary-rose-600);
+--secondary-rose: var(--primary-rose-500);
+ 
+
+/* Primary Hex Gradient Variables for Solid Colors at 600 Shade */
+
+--primary-hex-slate: linear-gradient(45deg, #475569, #475569);
+--primary-hex-gray: linear-gradient(45deg, #4b5563, #4b5563);
+--primary-hex-zinc: linear-gradient(45deg, #52525b, #52525b);
+--primary-hex-neutral: linear-gradient(45deg, #525252, #525252);
+--primary-hex-stone: linear-gradient(45deg, #57534e, #57534e);
+--primary-hex-red: linear-gradient(45deg, #dc2626, #dc2626);
+--primary-hex-orange: linear-gradient(45deg, #ea580c, #ea580c);
+--primary-hex-amber: linear-gradient(45deg, #d97706, #d97706);
+--primary-hex-yellow: linear-gradient(45deg, #ca8a04, #ca8a04);
+--primary-hex-lime: linear-gradient(45deg, #65a30d, #65a30d);
+--primary-hex-green: linear-gradient(45deg, #16a34a, #16a34a);
+--primary-hex-emerald: linear-gradient(45deg, #059669, #059669);
+--primary-hex-teal: linear-gradient(45deg, #0d9488, #0d9488);
+--primary-hex-cyan: linear-gradient(45deg, #0891b2, #0891b2);
+--primary-hex-sky: linear-gradient(45deg, #0284c7, #0284c7);
+--primary-hex-blue: linear-gradient(45deg, #2563eb, #2563eb);
+--primary-hex-indigo: linear-gradient(45deg, #4f46e5, #4f46e5);
+--primary-hex-violet: linear-gradient(45deg, #7c3aed, #7c3aed);
+--primary-hex-purple: linear-gradient(45deg, #9333ea, #9333ea);
+--primary-hex-fuchsia: linear-gradient(45deg, #c026d3, #c026d3);
+--primary-hex-pink: linear-gradient(45deg, #db2777, #db2777);
+--primary-hex-rose: linear-gradient(45deg, #e11d48, #e11d48);
 
 /* === Raw HSL Variables for Gradient Primary Colors (Base Solid Color for Each Gradient) === */
 /************************************************************************************ */
@@ -209,7 +504,7 @@
 *- Foreground (White for readability and contrast compliance)*/
 /***************************************************************************************/
 
-
+/* GRADIENT COLORS */
 /* === Deep Purple Theme Colors === */
 --primary-deep-purple: 267 84% 42%; /* Base Primary */
 --secondary-deep-purple: 267 74% 52%; /* Slightly lighter */
@@ -291,18 +586,18 @@
  --selected-link-visited: var(--selected-primary); */
 
 
-/* ========================== ONLY CHANGE THESE BELOW ================== */
+/* ========================== LIGHT MODE ONLY CHANGE THESE BELOW ================== */
   
   /* === Assignable Selected Variables (Dynamically Overridable) === */
-  --selected-primary: var(--primary-deep-purple);  /* CHANGE THIS VARIABLE*/
-  --selected-secondary: var(--secondary-deep-purple); /* CHANGE THIS VARIABLE*/
-  --selected-primary-hover: var(--primary-deep-purple-hover); /* CHANGE THIS VARIABLE*/
-  --selected-primary-active: var(--primary-deep-purple-active); /* CHANGE THIS VARIABLE*/
-  --selected-primary-foreground: var(--primary-deep-purple-foreground); /* CHANGE THIS VARIABLE*/
-
+  --selected-primary: var(--primary-deep-blue);  /* CHANGE THIS VARIABLE*/
+  --selected-secondary: var(--secondary-deep-blue); /* CHANGE THIS VARIABLE*/
+  --selected-primary-hover: var(--primary-deep-blue-hover); /* CHANGE THIS VARIABLE*/
+  --selected-primary-active: var(--primary-deep-blue-active); /* CHANGE THIS VARIABLE*/
+  --selected-primary-foreground: var(--primary-deep-blue-foreground); /* CHANGE THIS VARIABLE*/
+  --bg-main-theme: var(--primary-hex-deep-blue); /* CHANGE THIS VARIABLE FOPR LIGHT MODE MAIN BUTTON*/
   /* SELECT AND ADD YOUR GRADIENT PRIMARY VARIABLE BELOW TO THE "bg-priamry" CLASS */
   .bg-primary {
-    background-image: var(--primary-grad-deep-purple) !important;
+    background-image: var(--primary-hex-blue-green) !important;
     background-color: var(--selected-primary) !important;
   } 
 
@@ -313,6 +608,9 @@
   /* =================================================================== */
   }
  
+
+
+  /* DARK MODE */
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -353,18 +651,18 @@
  --selected-link-active: var(--selected-primary);
  --selected-link-visited: var(--selected-primary);
 
-  /* ========================== ONLY CHANGE THESE BELOW ================== */
-  
+  /* ========================== ONLY CHANGE THESE BELOW FOR DARK MODE ================== */
+ 
   /* === Assignable Selected Variables (Dynamically Overridable) === */
-  --selected-primary: var(--primary-deep-purple);  /* CHANGE THIS VARIABLE*/
-  --selected-secondary: var(--secondary-deep-purple); /* CHANGE THIS VARIABLE*/
-  --selected-primary-hover: var(--primary-deep-purple-hover); /* CHANGE THIS VARIABLE*/
-  --selected-primary-active: var(--primary-deep-purple-active); /* CHANGE THIS VARIABLE*/
-  --selected-primary-foreground: var(--primary-deep-purple-foreground); /* CHANGE THIS VARIABLE*/
-
+  --selected-primary: var(--primary-deep-blue);  /* CHANGE THIS VARIABLE*/
+  --selected-secondary: var(--secondary-deep-blue); /* CHANGE THIS VARIABLE*/
+  --selected-primary-hover: var(--primary-deep-blue-hover); /* CHANGE THIS VARIABLE*/
+  --selected-primary-active: var(--primary-deep-blue-active); /* CHANGE THIS VARIABLE*/
+  --selected-primary-foreground: var(--primary-deep-blue-foreground); /* CHANGE THIS VARIABLE*/
+  --bg-main-theme: var(--primary-hex-deep-blue); /* CHANGE THIS VARIABLE FOR DARK MODE must be hex or rgb value*/
   /* SELECT AND ADD YOUR GRADIENT PRIMARY VARIABLE BELOW TO THE "bg-priamry" CLASS */
   .bg-primary {
-    background-image: var(--primary-grad-deep-purple) !important;
+    background-image: var(--bg-main-theme) !important;
     background-color: var(--selected-primary) !important;
   } 
 

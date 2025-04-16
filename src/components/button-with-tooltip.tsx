@@ -19,8 +19,9 @@ const ButtonWithTooltip = forwardRef<HTMLDivElement, ButtonWithTooltipProps>(
       <TooltipProvider>
         <Tooltip delayDuration={0}>
           <TooltipTrigger asChild>
-            {React.cloneElement(children, { ref })}
-          </TooltipTrigger>
+            @{/* @ts-ignore */}
+            {React.cloneElement(children, {ref})}
+                      </TooltipTrigger>
           <TooltipContent side={side}>
             <div>{toolTipText}</div>
           </TooltipContent>

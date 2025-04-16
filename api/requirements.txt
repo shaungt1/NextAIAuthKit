@@ -1,14 +1,11 @@
 aiohttp
 aioredis
-asyncio
 black
-Celery
-celery[redis]
-celery[sqlalchemy]
-coloredlogs
 crewai
 crewai-tools
-crewai[tools]
+Celery
+celery[sqlalchemy]
+coloredlogs
 databases[postgresql]
 fastapi[standard]
 jira

@@ -48,8 +48,8 @@ const nextConfig = {
     ],
   },
   env: {
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:1920',
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1920',
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:1880',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1880',
   },
 };
 

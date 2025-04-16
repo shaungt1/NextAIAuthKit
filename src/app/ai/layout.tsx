@@ -31,7 +31,9 @@ export default function AIPlaygroundLayout() {
     
     return (
         <>
+        <div>
         <AIPlaygroundPage /> 
+        </div>
         </>
     );
 }

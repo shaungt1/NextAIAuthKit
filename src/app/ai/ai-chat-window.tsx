@@ -2,25 +2,25 @@
 
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 
-
-
 import Image from 'next/image';
-
-
 
 import useSpeechToText from '@/app/hooks/useSpeechRecognition';
 import ButtonWithTooltip from '@/components/button-with-tooltip';
 import CodeDisplayBlock from '@/components/code-display-block';
 import MultiImagePicker from '@/components/image-embedder';
-import { ChatBubble, ChatBubbleAction, ChatBubbleActionWrapper, ChatBubbleAvatar, ChatBubbleMessage } from '@/components/ui/chat/chat-bubble';
+import {
+    ChatBubble,
+    ChatBubbleAction,
+    ChatBubbleActionWrapper,
+    ChatBubbleAvatar,
+    ChatBubbleMessage
+} from '@/components/ui/chat/chat-bubble';
 import { Button } from '@/registry/new-york/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/registry/new-york/ui/card';
 import { Input } from '@/registry/new-york/ui/input';
 import { Separator } from '@/registry/new-york/ui/separator';
 import { CheckIcon, CopyIcon, Cross1Icon, Pencil1Icon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-
-
 
 import useAIChatStore from '../hooks/useAIChatStore';
 import AIChatInput from './ai-chat-input';
@@ -33,7 +33,6 @@ import ReactMarkdown from 'react-markdown';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { v4 as uuidv4 } from 'uuid';
-
 
 interface Message {
     role: 'user' | 'ai';
@@ -54,6 +53,18 @@ interface AIChatWindowProps {
     topP?: number;
     frequencyPenalty?: number;
     stream?: boolean;
+}
+
+// Add these type declarations at the top of your file
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            NEXT_PUBLIC_WS_PROTOCOL?: string;
+            NEXT_PUBLIC_WS_HOST?: string;
+            NEXT_PUBLIC_WS_PORT?: string;
+            NEXT_PUBLIC_WS_PATH?: string;
+        }
+    }
 }
 
 const MOTION_CONFIG = {
@@ -115,6 +126,17 @@ export default function AIChatWindow({
     const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'disconnected'>('connecting');
     let aiResponse = ''; // Temporary variable to accumulate AI response tokens
 
+    const wsProtocol = process.env.NEXT_PUBLIC_WS_PROTOCOL || 'ws';
+    const wsHost = process.env.NEXT_PUBLIC_WS_HOST || 'localhost';
+    const wsPort = process.env.NEXT_PUBLIC_WS_PORT || '8000';
+    const wsPath = process.env.NEXT_PUBLIC_WS_PATH?.startsWith('/')
+        ? process.env.NEXT_PUBLIC_WS_PATH
+        : `/${process.env.NEXT_PUBLIC_WS_PATH}`;
+
+    const wsUrl = `ws://localhost:8000/v1/ws/chat`;
+    // const wsUrl = `ws://localhost:8000/v1/ws/chat`;
+    console.log(`🔌 Connecting to WebSocket at ${wsUrl}`);
+
     // Handle basic chat state and actions without a store
     // const [conversationId, setConversationId] = useState<string>(uuidv4());
     // const [messages, setMessages] = useState<Message[]>([]);
@@ -162,58 +184,52 @@ export default function AIChatWindow({
         setEditInput
     } = useAIChatStore();
 
-
-    // State to handle the scroll to bottom 
+    // State to handle the scroll to bottom
     useEffect(() => {
         // Auto-scroll to the bottom when messages update
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-
-
-
-
-
-    // Handle state and side effects for WebSocket connection foir AI and user message
+    // wORKING FIXED VERSION
     useEffect(() => {
-        const connectWebSocket = () => {
-            socket.current = new WebSocket('ws://localhost:8000/v1/ws/chat');
+        let reconnectTimer: NodeJS.Timeout | null = null;
+        let socketRef: WebSocket | null = null;
+        let isComponentUnmounted = false;
 
-            // Track streaming state within this effect scope only
+        const connectWebSocket = () => {
+            if (socket.current?.readyState === WebSocket.OPEN || socket.current?.readyState === WebSocket.CONNECTING) {
+                console.log('⚠️ WebSocket already open or connecting, skipping new connection.');
+                return;
+            }
+
+            console.log('🌐 Connecting to WebSocket...');
+            socketRef = new WebSocket('ws://localhost:8000/v1/ws/chat');
+            socket.current = socketRef;
+
             let isStreamingAi = false;
             let currentStreamContent = '';
 
-            socket.current.onopen = () => {
+            socketRef.onopen = () => {
                 console.log('✅ WebSocket connection established.');
+                setConnectionStatus('connected');
             };
 
-            socket.current.onmessage = (event) => {
+            socketRef.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
                     console.log('📩 Received WebSocket message:', data);
 
-                    // Handle user message echo (reset streaming state)
                     if (data.role === 'user') {
-                        console.log('User message received, resetting streaming state');
                         isStreamingAi = false;
                         currentStreamContent = '';
                         setLoading(false);
-                        return; // Exit early, nothing else to process for user messages
+                        return;
                     }
 
-                    // Handle AI messages
                     if (data.role === 'ai') {
-                        // IMPORTANT: Check if this is an empty message - don't create bubbles for empty content
-                        // Many WebSocket implementations send an empty message to signal the start
-
-                        // For the first token of a new response
                         if (!isStreamingAi) {
-                            console.log('Starting new AI response stream');
                             isStreamingAi = true;
-                            currentStreamContent = data.content || ''; // Initialize with first chunk
-
-                            // Only create a new message if this is truly a new response
-                            // (avoid creating empty bubbles)
+                            currentStreamContent = data.content || '';
                             setMessages((prev) => [
                                 ...prev,
                                 {
@@ -223,33 +239,24 @@ export default function AIChatWindow({
                                 }
                             ]);
                         } else {
-                            // For subsequent tokens in this response
                             if (data.content) {
-                                // Only update if there's actual content
                                 currentStreamContent += data.content;
-
-                                // Update the last message
                                 setMessages((prev) => {
                                     const lastIndex = prev.length - 1;
-                                    if (lastIndex >= 0 && prev[lastIndex].role === 'ai') {
-                                        // Create a new array with all the previous messages
-                                        const updatedMessages = [...prev];
-                                        // Update only the last message's content
-                                        updatedMessages[lastIndex] = {
-                                            ...updatedMessages[lastIndex],
+                                    const updated = [...prev];
+                                    if (lastIndex >= 0 && updated[lastIndex].role === 'ai') {
+                                        updated[lastIndex] = {
+                                            ...updated[lastIndex],
                                             content: currentStreamContent
                                         };
-                                        return updatedMessages;
                                     }
-                                    return prev;
+                                    return updated;
                                 });
                             }
                         }
                     }
 
-                    // Handle end of response
                     if (data.end_of_response) {
-                        console.log('End of response received');
                         isStreamingAi = false;
                         currentStreamContent = '';
                         setLoading(false);
@@ -262,96 +269,201 @@ export default function AIChatWindow({
                 }
             };
 
-            // Add to the onopen handler:
-            socket.current.onopen = () => {
-                console.log('✅ WebSocket connection established.');
-                setConnectionStatus('connected');
-            };
-
-            // Update your onclose handler:
-            socket.current.onclose = (event) => {
-                console.log('❌ WebSocket connection closed:', event.reason || 'No reason provided.');
-                isStreamingAi = false;
-                currentStreamContent = '';
-                setLoading(false);
+            socketRef.onerror = (err) => {
+                console.error('⚠️ WebSocket error:', err);
                 setConnectionStatus('disconnected');
-
-                setTimeout(() => {
-                    console.log('🔄 Attempting to reconnect WebSocket...');
-                    setConnectionStatus('connecting');
-                    connectWebSocket();
-                }, 3000);
+                handleWebSocketErrorOrClose();
             };
-            // Add to the onerror handler:
-            socket.current.onerror = (error) => {
-                console.error('⚠️ WebSocket error:', error);
 
-                // Show the actual error message if available
-                if (error && error instanceof Event && error.target) {
-                    const target = error.target as WebSocket;
-                    console.error('WebSocket error details:', {
-                        readyState: target.readyState,
-                        url: target.url,
-                        protocol: target.protocol,
-                        extensions: target.extensions
-                    });
+            socketRef.onclose = (event) => {
+                console.warn('🔌 WebSocket closed:', event.reason || 'No reason provided.');
+                setConnectionStatus('disconnected');
+                handleWebSocketErrorOrClose();
+            };
+        };
+
+        const handleWebSocketErrorOrClose = () => {
+            if (isComponentUnmounted) return;
+            if (reconnectTimer) clearTimeout(reconnectTimer);
+
+            reconnectTimer = setTimeout(() => {
+                if (!isComponentUnmounted) {
+                    console.log('🔄 Reconnecting WebSocket...');
+                    connectWebSocket();
                 }
-
-                // Reset states
-                isStreamingAi = false;
-                currentStreamContent = '';
-                setLoading(false);
-                setConnectionStatus('disconnected');
-
-                // Add a UI notification for users
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        role: 'ai',
-                        content: '⚠️ Connection to AI service lost. Please try again in a moment.',
-                        timestamp: new Date().toLocaleTimeString()
-                    }
-                ]);
-
-                // Try to reconnect after a short delay
-                setTimeout(() => {
-                    console.log('🔄 Attempting to reconnect after error...');
-                    if (socket.current) {
-                        try {
-                            socket.current.close();
-                        } catch (e) {
-                            // Ignore errors when closing an already closed socket
-                        }
-                    }
-                    connectWebSocket();
-                }, 5000);
-            };
+            }, 3000);
         };
 
         connectWebSocket();
 
         return () => {
-            if (socket.current) {
-                socket.current.close();
+            isComponentUnmounted = true;
+            if (reconnectTimer) clearTimeout(reconnectTimer);
+            if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+                console.log('🧹 Closing WebSocket on component unmount...');
+                socket.current.close(1000, 'Component unmounted');
             }
         };
     }, []);
 
+    // useEffect(() => {
+    //     let reconnectTimer: NodeJS.Timeout | null = null;
+    //     let isUnmounted = false;
+    //     let isStreamingAi = false;
+    //     let currentStreamContent = '';
 
+    //     /**
+    //      * Establishes a new WebSocket connection to the AI backend
+    //      * Handles message reception, connection lifecycle, and reconnection.
+    //      */
+    //     const connectWebSocket = () => {
+    //         // Avoid duplicate connections
+    //         if (
+    //             socket.current &&
+    //             ([WebSocket.OPEN, WebSocket.CONNECTING] as number[]).includes(socket.current.readyState)
+    //         ) {
+    //             console.warn('⚠️ WebSocket already open or connecting — skipping.');
+    //             return;
+    //         }
 
+    //         console.log('🌐 Attempting WebSocket connection...');
+    //         // Create a new WebSocket instance
+    //         const ws = new WebSocket(wsUrl);
+    //         socket.current = ws;
 
+    //         // ✅ Handle open connection
+    //         ws.onopen = () => {
+    //             console.log('✅ WebSocket connected.');
+    //             setConnectionStatus('connected');
+    //         };
 
+    //         // ✅ Handle messages from backend (user + AI)
+    //         ws.onmessage = (event) => {
+    //             try {
+    //                 const data = JSON.parse(event.data);
+    //                 console.log('📨 WebSocket received:', data);
 
+    //                 if (data.role === 'user') {
+    //                     // User echo message — reset state
+    //                     isStreamingAi = false;
+    //                     currentStreamContent = '';
+    //                     setLoading(false);
+    //                     return;
+    //                 }
 
+    //                 if (data.role === 'ai') {
+    //                     // Initial chunk of response
+    //                     if (!isStreamingAi) {
+    //                         isStreamingAi = true;
+    //                         currentStreamContent = data.content || '';
 
+    //                         setMessages((prev) => [
+    //                             ...prev,
+    //                             {
+    //                                 role: 'ai',
+    //                                 content: currentStreamContent,
+    //                                 timestamp: new Date().toLocaleTimeString()
+    //                             }
+    //                         ]);
+    //                     } else if (data.content) {
+    //                         // Append token-by-token
+    //                         currentStreamContent += data.content;
 
+    //                         setMessages((prev) => {
+    //                             const lastIndex = prev.length - 1;
+    //                             const updated = [...prev];
+    //                             if (lastIndex >= 0 && updated[lastIndex].role === 'ai') {
+    //                                 updated[lastIndex] = {
+    //                                     ...updated[lastIndex],
+    //                                     content: currentStreamContent
+    //                                 };
+    //                             }
+    //                             return updated;
+    //                         });
+    //                     }
+    //                 }
 
+    //                 // ✅ End of stream marker
+    //                 if (data.end_of_response) {
+    //                     console.log('✅ End of AI response stream');
+    //                     isStreamingAi = false;
+    //                     currentStreamContent = '';
+    //                     setLoading(false);
+    //                 }
+    //             } catch (error) {
+    //                 console.error('❌ WebSocket message parse failed:', error);
+    //                 isStreamingAi = false;
+    //                 currentStreamContent = '';
+    //                 setLoading(false);
+    //             }
+    //         };
 
+    //         // ❌ Handle connection errors
+    //        ws.onerror = (event) => {
+    //            console.error('🚨 WebSocket encountered an error:', (event as ErrorEvent).message || event);
+    //            setConnectionStatus('disconnected');
+    //            handleReconnect('error');
+    //        };
 
+    //         // ❌ Handle connection close
+    //         ws.onclose = (event) => {
+    //             console.warn(`🔌 WebSocket closed: ${event.reason || 'No reason given'}`);
+    //             setConnectionStatus('disconnected');
+    //             isStreamingAi = false;
+    //             currentStreamContent = '';
+    //             setLoading(false);
 
+    //             handleReconnect('closed');
+    //         };
+    //     };
 
+    //     /**
+    //      * Handles automatic reconnection logic
+    //      * Includes cleanup and exponential backoff if needed
+    //      */
+    //     const handleReconnect = (reason: 'error' | 'closed') => {
+    //         if (isUnmounted) return;
 
-    
+    //         const delay = reason === 'error' ? 5000 : 3000;
+    //         console.log(`⏳ Reconnecting WebSocket in ${delay / 1000}s due to ${reason}...`);
+
+    //         // Inform user
+    //         setMessages((prev) => [
+    //             ...prev,
+    //             {
+    //                 role: 'ai',
+    //                 content:
+    //                     reason === 'error'
+    //                         ? '⚠️ Connection error. Attempting to reconnect...'
+    //                         : '🔌 Disconnected from AI. Reconnecting...',
+    //                 timestamp: new Date().toLocaleTimeString()
+    //             }
+    //         ]);
+
+    //         reconnectTimer = setTimeout(() => {
+    //             if (!isUnmounted) connectWebSocket();
+    //         }, delay);
+    //     };
+
+    //     /**
+    //      * Initial connection on mount
+    //      */
+    //     connectWebSocket();
+
+    //     /**
+    //      * Cleanup function for unmount or re-renders
+    //      */
+    //     return () => {
+    //         isUnmounted = true;
+    //         if (reconnectTimer) clearTimeout(reconnectTimer);
+
+    //         if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+    //             console.log('🧹 Closing WebSocket on unmount...');
+    //             socket.current.close(1000, 'Component unmounted');
+    //         }
+    //     };
+    // }, []);
+
     const sendMessage = () => {
         if (!input.trim()) return;
 
@@ -840,79 +952,83 @@ export default function AIChatWindow({
                                     <ChatBubbleActionWrapper
                                         variant={message.role === 'user' ? 'sent' : 'received'}
                                         className='!static !bottom-0 !left-0 !right-auto !top-auto mt-2 flex !translate-x-0 !translate-y-0 gap-2 opacity-100 transition-none'>
-                                        {message.role === 'user' && (
-                                            <>
-                                                <ButtonWithTooltip toolTipText='Edit Message' side='top'>
-                                                    <ChatBubbleAction
-                                                        icon={<Pencil1Icon className='h-4 w-4' />}
-                                                        onClick={() => {
-                                                            // Set the edit input to the current message content FIRST
-                                                            setEditInput(message.content);
-                                                            // Then set the message to editing mode
-                                                            setMessages((prev) =>
-                                                                prev.map((m, i) =>
-                                                                    i === index ? { ...m, isEditing: true } : m
-                                                                )
-                                                            );
-                                                        }}
-                                                        className='text-gray-400 hover:bg-transparent hover:text-gray-400'
-                                                        variant='ghost'
-                                                        size='icon'
-                                                    />
-                                                </ButtonWithTooltip>
-                                                {message.versions && message.versions.length > 0 && (
-                                                    <div className='ml-2 flex items-center gap-1'>
-                                                        <ButtonWithTooltip toolTipText='Previous Version' side='top'>
-                                                            <ChatBubbleAction
-                                                                icon={<ChevronLeftIcon className='h-3 w-3' />}
-                                                                onClick={() => handlePrevVersion(index)}
-                                                                disabled={(message.currentVersion || 0) <= 0}
-                                                                className='text-gray-400 hover:bg-transparent hover:text-gray-400'
-                                                                variant='ghost'
-                                                                size='icon'
-                                                            />
-                                                        </ButtonWithTooltip>
+                                        <div>
+                                            {message.role === 'user' && (
+                                                <>
+                                                    <ButtonWithTooltip toolTipText='Edit Message' side='top'>
+                                                        <ChatBubbleAction
+                                                            icon={<Pencil1Icon className='h-4 w-4' />}
+                                                            onClick={() => {
+                                                                // Set the edit input to the current message content FIRST
+                                                                setEditInput(message.content);
+                                                                // Then set the message to editing mode
+                                                                setMessages((prev) =>
+                                                                    prev.map((m, i) =>
+                                                                        i === index ? { ...m, isEditing: true } : m
+                                                                    )
+                                                                );
+                                                            }}
+                                                            className='text-gray-400 hover:bg-transparent hover:text-gray-400'
+                                                            variant='ghost'
+                                                            size='icon'
+                                                        />
+                                                    </ButtonWithTooltip>
+                                                    {message.versions && message.versions.length > 0 && (
+                                                        <div className='ml-2 flex items-center gap-1'>
+                                                            <ButtonWithTooltip
+                                                                toolTipText='Previous Version'
+                                                                side='top'>
+                                                                <ChatBubbleAction
+                                                                    icon={<ChevronLeftIcon className='h-3 w-3' />}
+                                                                    onClick={() => handlePrevVersion(index)}
+                                                                    disabled={(message.currentVersion || 0) <= 0}
+                                                                    className='text-gray-400 hover:bg-transparent hover:text-gray-400'
+                                                                    variant='ghost'
+                                                                    size='icon'
+                                                                />
+                                                            </ButtonWithTooltip>
 
-                                                        <span className='text-xs'>
-                                                            {(message.currentVersion || 0) + 1}/
-                                                            {(message.versions?.length || 0) + 1}
-                                                        </span>
+                                                            <span className='text-xs'>
+                                                                {(message.currentVersion || 0) + 1}/
+                                                                {(message.versions?.length || 0) + 1}
+                                                            </span>
 
-                                                        <ButtonWithTooltip toolTipText='Next Version' side='top'>
-                                                            <ChatBubbleAction
-                                                                icon={<ChevronRightIcon className='h-3 w-3' />}
-                                                                onClick={() => handleNextVersion(index)}
-                                                                disabled={
-                                                                    (message.currentVersion || 0) >=
-                                                                    (message.versions?.length || 0)
-                                                                }
-                                                                className='text-gray-400 hover:bg-transparent hover:text-gray-400'
-                                                                variant='ghost'
-                                                                size='icon'
-                                                            />
-                                                        </ButtonWithTooltip>
-                                                    </div>
-                                                )}
-                                            </>
-                                        )}
-                                        {message.role === 'ai' && (
-                                            <>
-                                                <ButtonWithTooltip toolTipText='Copy Response' side='top'>
-                                                    <ChatBubbleAction
-                                                        icon={<CopyIcon className='h-4 w-4' />}
-                                                        onClick={() => handleCopy(message.content)}
-                                                        className='text-gray-400 hover:bg-transparent hover:text-gray-400'
-                                                    />
-                                                </ButtonWithTooltip>
-                                                <ButtonWithTooltip toolTipText='Regenerate Response' side='top'>
-                                                    <ChatBubbleAction
-                                                        icon={<RefreshCcw className='h-4 w-4' />}
-                                                        onClick={() => handleRegenerate(index)}
-                                                        className='text-gray-400 hover:bg-transparent hover:text-gray-400'
-                                                    />
-                                                </ButtonWithTooltip>
-                                            </>
-                                        )}
+                                                            <ButtonWithTooltip toolTipText='Next Version' side='top'>
+                                                                <ChatBubbleAction
+                                                                    icon={<ChevronRightIcon className='h-3 w-3' />}
+                                                                    onClick={() => handleNextVersion(index)}
+                                                                    disabled={
+                                                                        (message.currentVersion || 0) >=
+                                                                        (message.versions?.length || 0)
+                                                                    }
+                                                                    className='text-gray-400 hover:bg-transparent hover:text-gray-400'
+                                                                    variant='ghost'
+                                                                    size='icon'
+                                                                />
+                                                            </ButtonWithTooltip>
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+                                            {message.role === 'ai' && (
+                                                <>
+                                                    <ButtonWithTooltip toolTipText='Copy Response' side='top'>
+                                                        <ChatBubbleAction
+                                                            icon={<CopyIcon className='h-4 w-4' />}
+                                                            onClick={() => handleCopy(message.content)}
+                                                            className='text-gray-400 hover:bg-transparent hover:text-gray-400'
+                                                        />
+                                                    </ButtonWithTooltip>
+                                                    <ButtonWithTooltip toolTipText='Regenerate Response' side='top'>
+                                                        <ChatBubbleAction
+                                                            icon={<RefreshCcw className='h-4 w-4' />}
+                                                            onClick={() => handleRegenerate(index)}
+                                                            className='text-gray-400 hover:bg-transparent hover:text-gray-400'
+                                                        />
+                                                    </ButtonWithTooltip>
+                                                </>
+                                            )}
+                                        </div>
                                     </ChatBubbleActionWrapper>
                                 </div>
                             </ChatBubbleMessage>

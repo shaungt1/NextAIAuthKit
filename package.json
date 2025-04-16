@@ -7,7 +7,7 @@
     "scripts": {
         "dev": "next dev --turbopack --port 1880",
         "build": "next build",
-        "start": "next start",
+        "start": "next start -p 1886",
         "lint": "next lint",
         "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""

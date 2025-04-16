@@ -1,16 +1,27 @@
 'use client';
 
-import { useSession, signOut } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+
+
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+
+
+
+import { signOut, useSession } from 'next-auth/react';
+// TODO REGISTER NAV LINKS FOR SECURE AND UNSECURE TO NAVE MENU
+//  TODO: ADD DROPDOWN NAV LIST PROTECTED AND UNPROTECTED
 // import { NAVIGATION_LINKS, NAVIGATION_LINKS_SECURE } from '@/app/routes';
 
+
+// ADD NEW NAVIGATION LINKS HERE
 const NAVIGATION_LINKS = [
-  { href: '/', label: 'Home', protected: false },
-  { href: '/examples', label: 'Examples', protected: false },
-  { href: '/ai', label: 'AI Playground', protected: true },
-  { href: '/admin', label: 'Admin Panel', protected: true, role: 'ADMIN' }, // Admin only
+    { href: '/', label: 'Home', protected: false },
+    { href: '/examples', label: 'Examples', protected: false },
+    { href: '/ai', label: 'AI Playground', protected: true },
+    { href: '/localchat', label: 'Local AI Chat', protected: true },
+    { href: '/admin', label: 'Admin Panel', protected: true, role: 'ADMIN' } // Admin only
 ];
 
 const NavigationLinks = () => {
